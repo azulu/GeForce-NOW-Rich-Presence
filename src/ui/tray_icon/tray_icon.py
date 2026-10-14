@@ -466,7 +466,7 @@ class SystemTrayIcon(QSystemTrayIcon,
         import sys
         import subprocess
         
-        logger.info("Reinicio solicitado por cambio de idioma...")
+        logger.info("Restart requested due to language change...")
         
         try:
             if self.pm:

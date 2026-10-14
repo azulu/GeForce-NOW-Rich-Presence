@@ -138,7 +138,7 @@ def set_autostart_windows(enable: bool):
     try:
         import winshell
     except ImportError:
-        logger.error("winshell no está instalado o falló su importación.")
+        logger.error("winshell is not installed or failed to import.")
         return
 
     app_name = "GeForceNOWRichPresence"
@@ -176,7 +176,7 @@ def set_autostart_windows(enable: bool):
                 shortcut.path = target_path
                 shortcut.arguments = arguments
                 shortcut.description = "Start GeForce NOW Rich Presence"
-            logger.info("✅ Acceso directo creado en shell:startup para iniciar con Windows (retraso 60s).")
+            logger.info("✅ Shortcut created in shell:startup to start with Windows (60s delay).")
 
             # Intentar rehabilitar en StartupApproved si estaba deshabilitado
             try:
@@ -186,16 +186,16 @@ def set_autostart_windows(enable: bool):
                 enabled_bytes = b'\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
                 winreg.SetValueEx(key, f"{app_name}.lnk", 0, winreg.REG_BINARY, enabled_bytes)
                 winreg.CloseKey(key)
-                logger.info("✅ Estado rehabilitado en StartupApproved.")
+                logger.info("✅ Status re-enabled in StartupApproved.")
             except Exception as reg_err:
-                logger.debug(f"No se pudo escribir en StartupApproved: {reg_err}")
+                logger.debug(f"Could not write to StartupApproved: {reg_err}")
         else:
             # Eliminar el acceso directo
             if os.path.exists(shortcut_path):
                 os.remove(shortcut_path)
-            logger.info("✅ Acceso directo eliminado de shell:startup.")
+            logger.info("✅ Shortcut removed from shell:startup.")
     except Exception as e:
-        logger.error(f"Error modificando inicio de Windows (winshell): {e}")
+        logger.error(f"Failed to modify Windows startup (winshell): {e}")
 
 def load_locale(lang: str = "en") -> dict:
     path = LANG_DIR / f"{lang}.json"
@@ -219,7 +219,7 @@ STEAM_COOKIE=''
     try:
         if not path.exists():
             path.write_text(default_env_content, encoding="utf-8")
-            logger.info(f"✅ .env creado en: {path}")
+            logger.info(f"✅ .env created at: {path}")
     except PermissionError:
         if IS_WINDOWS:
             appdata = Path(os.getenv("APPDATA", Path.home() / "AppData" / "Roaming"))
@@ -233,7 +233,7 @@ STEAM_COOKIE=''
         alt = appdir / ".env"
         if not alt.exists():
             alt.write_text(default_env_content, encoding="utf-8")
-            logger.info(f"⚠️ No se pudo crear .env junto al exe; creado en: {alt}")
+            logger.info(f"⚠️ Could not create .env next to the exe; created at: {alt}")
         return alt
     return path
 
@@ -243,15 +243,15 @@ def acquire_lock() -> bool:
             pid = int(LOCK_FILE.read_text().strip())
 
             if psutil.pid_exists(pid):
-                logger.warning(f"⚠️ Ya existe otra instancia (PID {pid}). Reiniciando...")
+                logger.warning(f"⚠️ Another instance is already running (PID {pid}). Restarting...")
                 try:
                     # Cierra la instancia anterior (si es posible)
                     p = psutil.Process(pid)
                     p.terminate()
                     p.wait(5)
-                    logger.info("✅ Instancia anterior finalizada correctamente.")
+                    logger.info("✅ Previous instance terminated successfully.")
                 except Exception as e:
-                    logger.error(f"No se pudo cerrar la instancia anterior: {e}")
+                    logger.error(f"Could not close the previous instance: {e}")
                 
                 # We don't restart here, we just return False or let the caller handle it.
                 # The original code restarted the process.
@@ -270,7 +270,7 @@ def acquire_lock() -> bool:
                 # We can try to proceed.
             else:
                 LOCK_FILE.unlink()
-                logger.debug("Lock huérfano eliminado.")
+                logger.debug("Orphaned lock removed.")
         except Exception:
             try:
                 LOCK_FILE.unlink()
@@ -293,18 +293,18 @@ def safe_json_load(path: Path) -> Optional[Dict]:
         with path.open("r", encoding="utf-8-sig") as f:
             return json.load(f)
     except Exception as e:
-        logger.error(f"Error cargando JSON {path}: {e}")
+        logger.error(f"Failed to load JSON {path}: {e}")
         return None
 
 def save_cookie_to_env(cookie_value: str, env_path: Path):
     try:
         if env_path.exists():
             set_key(str(env_path), "STEAM_COOKIE", cookie_value)
-            logger.info("💾 Cookie guardada en .env correctamente.")
+            logger.info("💾 Cookie saved to .env successfully.")
         else:
-            logger.warning("⚠️ No se encontró el archivo .env para guardar la cookie.")
+            logger.warning("⚠️ .env file not found, cannot save the cookie.")
     except Exception as e:
-        logger.error(f"❌ Error guardando cookie en .env: {e}")
+        logger.error(f"❌ Failed to save cookie to .env: {e}")
 
 def save_json(obj, path: Path):
     try:
@@ -322,7 +322,7 @@ def save_json(obj, path: Path):
                 temp_path.unlink()
             raise replace_err
     except Exception as e:
-        logger.error(f"Error guardando JSON {path}: {e}")
+        logger.error(f"Failed to save JSON {path}: {e}")
 
 def validate_discord_cache(data) -> bool:
     """Validates that the discord cache structure is correct."""
@@ -345,16 +345,16 @@ def download_from_github(filename: str) -> Optional[dict]:
     """Downloads a configuration/cache file from the master branch on GitHub."""
     url = f"https://raw.githubusercontent.com/KarmaDevz/GeForce-NOW-Rich-Presence/master/config/{filename}"
     try:
-        logger.info(f"⬇️ Descargando respaldo de {filename} desde GitHub...")
+        logger.info(f"⬇️ Downloading fallback copy of {filename} from GitHub...")
         import requests
         resp = requests.get(url, timeout=15)
         if resp.status_code == 200:
             data = resp.json()
             return data
         else:
-            logger.warning(f"⚠️ Error al descargar de GitHub: Código {resp.status_code}")
+            logger.warning(f"⚠️ GitHub download failed: status {resp.status_code}")
     except Exception as e:
-        logger.error(f"❌ Error en la descarga de GitHub para {filename}: {e}")
+        logger.error(f"❌ GitHub download failed for {filename}: {e}")
     return None
 
 def calculate_file_hash(path: Path, algorithm: str = "sha256") -> Optional[str]:
@@ -365,7 +365,7 @@ def calculate_file_hash(path: Path, algorithm: str = "sha256") -> Optional[str]:
                 hash_func.update(chunk)
         return hash_func.hexdigest()
     except Exception as e:
-        logger.error(f"Error calculando hash de {path}: {e}")
+        logger.error(f"Failed to compute hash of {path}: {e}")
         return None
 
 def is_startup_disabled_in_task_manager() -> bool:

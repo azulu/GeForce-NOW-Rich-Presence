@@ -225,7 +225,7 @@ def get_installed_build(file_path: Optional[Union[str, Path]] = None) -> Optiona
             if isinstance(data, dict) and "version" in data:
                 return data
     except Exception as e:
-        logger.warning(f"Error al leer installed_build.json: {e}")
+        logger.warning(f"Failed to read installed_build.json: {e}")
     return None
 
 def save_installed_build(build_info: dict, file_path: Optional[Union[str, Path]] = None) -> bool:
@@ -248,10 +248,10 @@ def save_installed_build(build_info: dict, file_path: Optional[Union[str, Path]]
             os.fsync(f.fileno())
             
         os.replace(str(temp_file), str(path_obj))
-        logger.info(f"💾 installed_build.json guardado correctamente: v{build_info.get('version')} (SHA: {build_info.get('sha256', '')[:8]}...)")
+        logger.info(f"💾 installed_build.json saved successfully: v{build_info.get('version')} (SHA: {build_info.get('sha256', '')[:8]}...)")
         return True
     except Exception as e:
-        logger.error(f"Error al guardar installed_build.json: {e}")
+        logger.error(f"Failed to save installed_build.json: {e}")
         if temp_file and temp_file.exists():
             try:
                 temp_file.unlink()
@@ -306,7 +306,7 @@ def get_remote_checksum(release_data: dict, asset_name: str) -> Optional[str]:
             parsed = parse_sha256sums(resp.text)
             return parsed.get(asset_name)
     except Exception as e:
-        logger.warning(f"No se pudo obtener SHA256SUMS.txt del release: {e}")
+        logger.warning(f"Could not get SHA256SUMS.txt from the release: {e}")
     return None
 
 def is_build_newer_or_different(
@@ -339,14 +339,14 @@ def is_build_newer_or_different(
         if installed_build and installed_build.get("sha256"):
             local_sha = installed_build.get("sha256", "").lower()
             if local_sha and local_sha != remote_sha256.lower():
-                logger.info(f"🔥 Hotfix/Recompilación detectada para {latest_version_str} vía SHA-256 (Local: {local_sha[:8]}..., Remoto: {remote_sha256[:8]}...)")
+                logger.info(f"🔥 Hotfix/rebuild detected for {latest_version_str} via SHA-256 (Local: {local_sha[:8]}..., Remote: {remote_sha256[:8]}...)")
                 return (True, "hotfix_hash_mismatch")
             else:
-                logger.info(f"✅ Versión {latest_version_str} ya instalada con el mismo SHA-256.")
+                logger.info(f"✅ Version {latest_version_str} already installed with the same SHA-256.")
                 return (False, "same_build")
         else:
             # Baseline for existing installs with identical version number
-            logger.info(f"ℹ️ Versión {latest_version_str} coincide sin installed_build.json previo. Estableciendo línea base.")
+            logger.info(f"ℹ️ Version {latest_version_str} matches with no previous installed_build.json. Setting baseline.")
             return (False, "same_build_baseline_needed")
             
     # Priority 2: Metadata Fallback (if SHA256SUMS.txt was not available)
@@ -362,7 +362,7 @@ def is_build_newer_or_different(
             
             if (saved_id and current_id and saved_id != current_id) or \
                (saved_updated_at and current_updated_at and saved_updated_at != current_updated_at):
-                logger.info(f"🔥 Hotfix/Recompilación detectada para {latest_version_str} vía metadatos de GitHub (ID: {saved_id}->{current_id}, Fecha: {saved_updated_at}->{current_updated_at})")
+                logger.info(f"🔥 Hotfix/rebuild detected for {latest_version_str} via GitHub metadata (ID: {saved_id}->{current_id}, Date: {saved_updated_at}->{current_updated_at})")
                 return (True, "metadata_changed")
 
     return (False, "same_build")
@@ -374,9 +374,9 @@ def verify_downloaded_checksum(file_path: Union[str, Path], expected_sha256: Opt
     actual_sha = get_file_sha256(file_path)
     is_valid = (actual_sha.lower() == expected_sha256.lower())
     if not is_valid:
-        logger.error(f"❌ Error de verificación de Checksum! Esperado: {expected_sha256.lower()}, Obtenido: {actual_sha.lower()}")
+        logger.error(f"❌ Checksum verification failed! Expected: {expected_sha256.lower()}, Got: {actual_sha.lower()}")
     else:
-        logger.info(f"✅ Checksum SHA-256 verificado exitosamente ({actual_sha[:8]}...)")
+        logger.info(f"✅ SHA-256 checksum verified successfully ({actual_sha[:8]}...)")
     return is_valid
 
 
@@ -400,17 +400,17 @@ class UpdateWorker(QThread):
 
     def check_updates(self):
         try:
-            logger.info("📦 Buscando actualizaciones...")
+            logger.info("📦 Checking for updates...")
             response = requests.get(GITHUB_RELEASES_URL, timeout=10)
             response.raise_for_status()
             data = response.json()
 
             latest_version_str = data.get("tag_name", "v0.0.0")
-            logger.info(f"📦 Versión actual: {VERSION}, Última versión GitHub: {latest_version_str}")
+            logger.info(f"📦 Current version: {VERSION}, latest GitHub version: {latest_version_str}")
 
             platform_asset = get_platform_asset(data)
             if not platform_asset:
-                logger.warning("No se encontró un archivo de actualización compatible para la plataforma.")
+                logger.warning("No compatible update file found for this platform.")
                 self.check_finished.emit(False, "", "", "", {}, "no_asset")
                 return
 
@@ -454,12 +454,12 @@ class UpdateWorker(QThread):
                 self.check_finished.emit(False, "", "", "", {}, reason)
 
         except Exception as e:
-            logger.error(f"Error al buscar actualizaciones: {e}")
+            logger.error(f"Failed to check for updates: {e}")
             self.error_occurred.emit(str(e))
 
     def download_update(self):
         try:
-            logger.info(f"Descargando actualización desde {self.download_url}")
+            logger.info(f"Downloading update from {self.download_url}")
             response = requests.get(self.download_url, stream=True, timeout=30)
             response.raise_for_status()
 
@@ -506,7 +506,7 @@ class UpdateWorker(QThread):
             self.download_finished.emit(str(installer_path))
 
         except Exception as e:
-            logger.error(f"Error al descargar actualización: {e}")
+            logger.error(f"Failed to download update: {e}")
             self.error_occurred.emit(str(e))
 
 
@@ -670,7 +670,7 @@ class UpdateDialog(QDialog):
                             f"  Start-Process -FilePath '{exe_path}'"
                             f"}}"
                         )
-                        logger.info(f"Ejecutando auto-actualizador silencioso en segundo plano (Windows): {powershell_cmd}")
+                        logger.info(f"Running silent background auto-updater (Windows): {powershell_cmd}")
                         subprocess.Popen(
                             ["powershell", "-Command", powershell_cmd],
                             creationflags=subprocess.CREATE_NO_WINDOW
@@ -697,7 +697,7 @@ class UpdateDialog(QDialog):
                             f"  rm -rf \"$temp_extract\"; "
                             f"fi"
                         )
-                        logger.info(f"Ejecutando auto-actualizador silencioso en segundo plano (macOS): {bash_cmd}")
+                        logger.info(f"Running silent background auto-updater (macOS): {bash_cmd}")
                         subprocess.Popen(["bash", "-c", bash_cmd])
                         sys.exit(0)
                         
@@ -723,7 +723,7 @@ class UpdateDialog(QDialog):
                             f"  rm -rf \"$temp_extract\"; "
                             f"fi"
                         )
-                        logger.info(f"Ejecutando auto-actualizador silencioso en segundo plano (Linux): {bash_cmd}")
+                        logger.info(f"Running silent background auto-updater (Linux): {bash_cmd}")
                         subprocess.Popen(["bash", "-c", bash_cmd])
                         sys.exit(0)
                 else:
@@ -775,18 +775,18 @@ class Updater(QObject):
                 err_detail = ""
                 if data and isinstance(data, dict):
                     err_detail = f" (Versión: {data.get('version', 'unknown')}, Error: {data.get('error', 'unknown')})"
-                logger.warning(f"La última actualización falló{err_detail}. Se omitirá la comprobación de actualizaciones automática en esta sesión.")
+                logger.warning(f"The last update failed{err_detail}. Skipping the automatic update check this session.")
                 try:
                     flag_file.unlink()
                 except Exception as e:
-                    logger.error(f"No se pudo eliminar el archivo de registro de fallo: {e}")
+                    logger.error(f"Could not delete the update failure flag file: {e}")
                 self.checking_updates = False
                 self.update_available = False
                 self.update_status_changed.emit()
                 return
 
         if self.checking_updates:
-            logger.info("Comprobación de actualizaciones ya en curso. Ignorando nueva solicitud.")
+            logger.info("Update check already in progress. Ignoring new request.")
             return
 
         self.checking_updates = True
@@ -815,7 +815,7 @@ class Updater(QObject):
                     ignore_until = self.config_manager.get_setting("updater_ignore_until", 0.0)
                     
                     if last_ignored == version and current_time < ignore_until:
-                        logger.info(f"Actualización automática a {version} pospuesta hasta {time.ctime(ignore_until)} (ignorado).")
+                        logger.info(f"Automatic update to {version} postponed until {time.ctime(ignore_until)} (ignored).")
                         return
 
                 self.show_update_dialog()
@@ -892,4 +892,4 @@ class Updater(QObject):
         self.config_manager.set_setting("updater_next_ignore_days", escalated_next_days)
         self.config_manager.set_setting("updater_ignore_until", ignore_until)
         
-        logger.info(f"Actualización a {version} ignorada por {next_ignore_days} días (hasta {time.ctime(ignore_until)}). Próximo aplazamiento será de {escalated_next_days} días.")
+        logger.info(f"Update to {version} ignored for {next_ignore_days} days (until {time.ctime(ignore_until)}). Next postponement will be {escalated_next_days} days.")

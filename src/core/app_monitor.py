@@ -30,11 +30,11 @@ class AppMonitor:
             if match:
                 try:
                     proc.kill()
-                    logger.info(f"💀 Proceso {proc.info['name']} cerrado.")
+                    logger.info(f"💀 Process {proc.info['name']} closed.")
                 except psutil.NoSuchProcess:
                     pass
                 except Exception as e:
-                    logger.error(f"⚠️ No se pudo cerrar {proc.info['name']}: {e}")
+                    logger.error(f"⚠️ Could not close {proc.info['name']}: {e}")
 
     @staticmethod
     def monitor_geforce_and_dumb():
@@ -58,9 +58,9 @@ class AppMonitor:
         if sys.platform == "win32":
             AppMonitor.kill_process("dumb.exe")
             subprocess.Popen([path_dumb])
-            logger.info("🚀 dumb.exe iniciado.")
+            logger.info("🚀 dumb.exe started.")
         elif sys.platform == "darwin":
             AppMonitor.kill_process("dumb")
             AppMonitor.kill_process("dumb.app")
             subprocess.Popen(["open", "-n", "-a", path_dumb])
-            logger.info("🚀 dumb.app iniciado.")
+            logger.info("🚀 dumb.app started.")

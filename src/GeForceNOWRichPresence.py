@@ -87,13 +87,13 @@ def show_crash_dialog_slot(tb_text):
             from src.core.utils import release_lock
             release_lock()
         except Exception as e:
-            logger.error(f"Error creando lock: {e}")
+            logger.error(f"Failed to release lock: {e}")
             pass
             
         try:
             QApplication.quit()
         except Exception as e:
-            logger.error(f"Error borrando aplicación: {e}")
+            logger.error(f"Failed to quit application: {e}")
             pass
             
         os._exit(1)
@@ -175,20 +175,20 @@ def main():
         sys.exit(0)
     
     if args.delay > 0:
-        logger.info(f"Esperando {args.delay} segundos antes de iniciar...")
+        logger.info(f"Waiting {args.delay} seconds before starting...")
         time.sleep(args.delay)
 
     # 1. Ensure .env and load it
     actual_env_path = ensure_env_file(ENV_PATH)
     try:
         load_dotenv(actual_env_path)
-        logger.debug(".env cargado")
+        logger.debug(".env loaded")
     except Exception:
-        logger.debug("python-dotenv no disponible o .env no encontrado")
+        logger.debug("python-dotenv not available or .env not found")
 
     # 2. Acquire Lock
     if not acquire_lock():
-        logger.warning("Otra instancia ya está corriendo. Saliendo.")
+        logger.warning("Another instance is already running. Exiting.")
         sys.exit(0)
 
     # 3. Load Locale
@@ -205,7 +205,7 @@ def main():
             from src.core.jumplist import setup_jumplist
             setup_jumplist(texts)
         except Exception as e:
-            logger.debug(f"No se pudo registrar JumpList: {e}")
+            logger.debug(f"Could not register JumpList: {e}")
 
     # 4. Initialize PyQt Application
     app = QApplication(sys.argv)
@@ -247,12 +247,12 @@ def main():
             app_name = "GeForceNOWRichPresence"
             shortcut_path = os.path.join(winshell.startup(), f"{app_name}.lnk")
             if not os.path.exists(shortcut_path):
-                logger.info("Creando acceso directo de inicio de Windows faltante...")
+                logger.info("Creating missing Windows startup shortcut...")
                 set_autostart_windows(True)
         except ImportError:
-            logger.debug("winshell no disponible para comprobar acceso directo.")
+            logger.debug("winshell not available to check shortcut.")
         except Exception as e:
-            logger.error(f"Error comprobando acceso directo de inicio de Windows: {e}")
+            logger.error(f"Failed to check Windows startup shortcut: {e}")
 
     # 5.1 Launch Apps
     if IS_WINDOWS and config_manager.get_setting("start_discord_on_launch", False):
@@ -286,13 +286,13 @@ def main():
 
     # 6.1 Optional Cookie Fetch
     if config_manager.get_setting("get_cookie_on_launch", True):
-        logger.info("Intentando obtener cookie de Steam al inicio (según configuración)...")
+        logger.info("Trying to get Steam cookie at startup (per settings)...")
         cookie = cookie_manager.get_steam_cookie(confirm_callback=None)
         if cookie:
             presence_manager.update_cookie(cookie)
 
     # Cleanup residues from previous sessions
-    logger.info(" 🧹 Limpiando residuos de sesiones anteriores...")
+    logger.info(" 🧹 Cleaning up leftovers from previous sessions...")
     presence_manager.close_fake_executable()
 
     # 7. Initialize UI

@@ -37,7 +37,7 @@ class CookieManager:
             if r.status_code == 200 and "Sign In" not in r.text and "login" not in r.url.lower():
                 return True
         except Exception as e:
-            logger.debug(f"Error validando cookie de Steam: {e}")
+            logger.debug(f"Failed to validate Steam cookie: {e}")
         return False
 
     def get_steam_cookie(self, confirm_callback: Optional[callable] = None) -> Optional[str]:
@@ -45,12 +45,12 @@ class CookieManager:
         Obtiene y valida la cookie configurada actualmente en el entorno (.env).
         """
         if self.env_cookie:
-            logger.info("🧩 Validando cookie de Steam desde .env...")
+            logger.info("🧩 Validating Steam cookie from .env...")
             if self.validar_cookie(self.env_cookie):
-                logger.info("✅ Cookie del .env válida.")
+                logger.info("✅ .env cookie is valid.")
                 return self.env_cookie
             else:
-                logger.warning("⚠️ Cookie del .env expirada o inválida.")
+                logger.warning("⚠️ .env cookie is expired or invalid.")
         return None
 
     def save_cookie(self, cookie_value: str) -> bool:
@@ -61,6 +61,6 @@ class CookieManager:
         if self.validar_cookie(clean_cookie):
             save_cookie_to_env(clean_cookie, ENV_PATH)
             self.env_cookie = clean_cookie
-            logger.info("✅ Cookie de Steam guardada y validada exitosamente en .env.")
+            logger.info("✅ Steam cookie saved to .env and validated successfully.")
             return True
         return False

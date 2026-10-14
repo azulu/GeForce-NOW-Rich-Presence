@@ -562,7 +562,7 @@ class CrashReporterDialog(QDialog):
             updater = Updater(parent_widget=self)
             updater.check_for_updates(silent=False)
         except Exception as e:
-            logger.error(f"Error al comprobar hotfix desde crash reporter: {e}")
+            logger.error(f"Failed to check for hotfix from crash reporter: {e}")
 
     def on_copy(self):
         from PyQt5.QtWidgets import QApplication

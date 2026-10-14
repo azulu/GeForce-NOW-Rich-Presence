@@ -53,7 +53,7 @@ class AppLauncher:
                 if name == target_name.lower() or target_name.lower() in name:
                     proc.kill()
         except Exception as e:
-            logger.error(f"Error al cerrar {target_name}: {e}")
+            logger.error(f"Failed to close {target_name}: {e}")
 
     @staticmethod
     def disable_native_rich_presence() -> tuple[bool, bool]:
@@ -76,7 +76,7 @@ class AppLauncher:
                 with open(config_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
             except (json.JSONDecodeError, IOError) as e:
-                logger.error(f"JSON corrupto o error de lectura: {e}")
+                logger.error(f"Corrupt JSON or read error: {e}")
                 success = False
                 data = None
 
@@ -107,10 +107,10 @@ class AppLauncher:
                         
                         with open(config_path, "w", encoding="utf-8") as f:
                             json.dump(data, f, separators=(',', ':'))
-                        logger.info("Flag discordRpEnabled deshabilitado en sharedstorage.json.")
+                        logger.info("discordRpEnabled flag disabled in sharedstorage.json.")
                         modified = True
                 except Exception as e:
-                    logger.error(f"Error inesperado al procesar JSON: {e}")
+                    logger.error(f"Unexpected error processing JSON: {e}")
                     success = False
 
         # 2. Renombrar Discord.dll
@@ -125,13 +125,13 @@ class AppLauncher:
             try:
                 dll_path.rename(disabled_path)
                 modified = True
-                logger.info("Plugin nativo Discord.dll renombrado a Discord.dll.disabled exitosamente.")
+                logger.info("Native Discord.dll plugin renamed to Discord.dll.disabled successfully.")
             except PermissionError:
                 # El archivo está bloqueado por el proceso en ejecución
-                logger.warning("Discord.dll está bloqueado (GeForce NOW en ejecución). Se reintentará tras detener el proceso.")
+                logger.warning("Discord.dll is locked (GeForce NOW is running). Will retry after stopping the process.")
                 modified = True
             except Exception as e:
-                logger.error(f"Error renombrando Discord.dll: {e}")
+                logger.error(f"Failed to rename Discord.dll: {e}")
                 success = False
 
         return success, modified
@@ -147,7 +147,7 @@ class AppLauncher:
         
         if is_running:
             if modified and sys.platform == "win32":
-                logger.info("Reiniciando GeForce NOW para aplicar la desactivación del Rich Presence nativo...")
+                logger.info("Restarting GeForce NOW to disable its native Rich Presence...")
                 AppLauncher.kill_process_by_name("GeForceNOW.exe")
                 time.sleep(1.5)  # Esperar a que se cierre completamente
                 # Reintentar la desactivación ahora que el proceso está cerrado y el archivo no está bloqueado
@@ -195,4 +195,4 @@ class AppLauncher:
             else:
                 subprocess.Popen([updater, "--processStart", "Discord.exe"])
         else:
-            logger.warning("⚠️ No se encontró Discord instalado en la ruta por defecto.")
+            logger.warning("⚠️ Discord not found in the default installation path.")

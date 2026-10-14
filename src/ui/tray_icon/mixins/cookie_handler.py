@@ -36,7 +36,7 @@ class CookieHandlerMixin(Base):
         )
 
         if not ok:
-            logger.info("El usuario canceló el diálogo de configuración de cookie.")
+            logger.info("User cancelled the cookie setup dialog.")
             return
 
         clean_cookie = cookie_val.strip()
@@ -46,7 +46,7 @@ class CookieHandlerMixin(Base):
                 save_cookie_to_env("", ENV_PATH)
                 self.pm.cookie_manager.env_cookie = None
                 self.pm.update_cookie(None)
-                logger.info("Cookie de Steam eliminada de la configuración.")
+                logger.info("Steam cookie removed from settings.")
                 self.showMessage(
                     TEXTS.get("cookie_title", "Cookie"),
                     TEXTS.get("cookie_removed", "Cookie de Steam eliminada."),
@@ -60,7 +60,7 @@ class CookieHandlerMixin(Base):
             save_cookie_to_env(clean_cookie, ENV_PATH)
             self.pm.cookie_manager.env_cookie = clean_cookie
             self.pm.update_cookie(clean_cookie)
-            logger.info("✅ Cookie de Steam configurada y validada exitosamente.")
+            logger.info("✅ Steam cookie configured and validated successfully.")
             self.showMessage(
                 TEXTS.get("cookie_title", "Cookie"),
                 TEXTS.get("cookie_saved", "Cookie de Steam guardada y validada exitosamente."),
@@ -68,7 +68,7 @@ class CookieHandlerMixin(Base):
                 3000
             )
         else:
-            logger.warning("❌ La cookie de Steam ingresada no es válida o ha expirado.")
+            logger.warning("❌ The entered Steam cookie is invalid or has expired.")
             GamingMessageBox.show_warning(
                 None,
                 TEXTS.get("cookie_title", "Cookie"),

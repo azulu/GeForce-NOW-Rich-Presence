@@ -61,27 +61,27 @@ class ConfigManager:
         if fixed_path.exists():
             data = safe_json_load(fixed_path)
             if not validate_games_config(data):
-                logger.warning("⚠️ games_config_merged.json está corrupto o es inválido.")
+                logger.warning("⚠️ games_config_merged.json is corrupt or invalid.")
                 data = None
 
         # 2. Intentar cargar copia de respaldo local (backup)
         if data is None and backup_path.exists():
             data = safe_json_load(backup_path)
             if validate_games_config(data):
-                logger.info("ℹ️ Cargando copia de respaldo local (backup) de games_config_merged.json")
+                logger.info("ℹ️ Loading local backup copy of games_config_merged.json")
                 save_json(data, fixed_path)  # Restaurar el archivo principal
             else:
-                logger.warning("⚠️ Copia de respaldo local games_config_merged_backup.json también está corrupta.")
+                logger.warning("⚠️ Local backup copy games_config_merged_backup.json is also corrupt.")
                 data = None
 
         # 3. Intentar descargar respaldo desde GitHub
         if data is None:
             data = download_from_github("games_config_merged.json")
             if validate_games_config(data):
-                logger.info("✅ Descargado exitosamente games_config_merged.json desde GitHub.")
+                logger.info("✅ Successfully downloaded games_config_merged.json from GitHub.")
                 save_json(data, fixed_path)  # Guardar como archivo principal
             else:
-                logger.warning("⚠️ No se pudo obtener un games_config_merged.json válido desde GitHub.")
+                logger.warning("⚠️ Could not get a valid games_config_merged.json from GitHub.")
                 data = None
 
         # Aplicar los datos cargados o iniciar con un diccionario vacío
@@ -95,11 +95,11 @@ class ConfigManager:
             if not backup_path.exists():
                 try:
                     save_json(data, backup_path)
-                    logger.info("💾 Copia de seguridad local creada en games_config_merged_backup.json")
+                    logger.info("💾 Local backup created at games_config_merged_backup.json")
                 except Exception as e:
-                    logger.error(f"No se pudo guardar la copia de seguridad: {e}")
+                    logger.error(f"Could not save the backup: {e}")
         else:
-            logger.error("❌ Todos los métodos de carga de games_config_merged.json fallaron. Se cargará un JSON vacío.")
+            logger.error("❌ All methods of loading games_config_merged.json failed. Loading an empty JSON.")
             self.games_config = {}
             self.games_config_path = fixed_path
 

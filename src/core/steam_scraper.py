@@ -29,7 +29,7 @@ class SteamScraper:
         if steam_cookie:
             self.session.cookies.set('steamLoginSecure', steam_cookie, domain='steamcommunity.com')
             self._steam_expired_warned = False
-            logger.info("🍪 Cookie de Steam actualizada en el Scraper.")
+            logger.info("🍪 Steam cookie updated in the scraper.")
 
 
     def get_rich_presence(self) -> Tuple[Optional[str], Optional[int]]:
@@ -37,23 +37,23 @@ class SteamScraper:
         Retorna una tupla (rich_presence_text, group_size)
         """
         if not self.test_rich_url:
-            logger.debug("No TEST_RICH_URL configurada.")
+            logger.debug("No TEST_RICH_URL configured.")
             return None, None
         
         try:
             resp = self.session.get(self.test_rich_url, timeout=10)
             if resp.status_code != 200:
-                logger.debug("Status != 200 al obtener rich presence")
+                logger.debug("Status != 200 when fetching rich presence")
                 return None, None
             
             if "Sign In" in resp.text or "login" in resp.url.lower():
                 if not getattr(self, "_steam_expired_warned", False):
-                    logger.warning("🔒 Sesión de Steam expirada.")
+                    logger.warning("🔒 Steam session expired.")
                     self._steam_expired_warned = True
                 return None, None
             else:
                 if getattr(self, "_steam_expired_warned", False):
-                    logger.info("✅ Sesión de Steam restaurada.")
+                    logger.info("✅ Steam session restored.")
                     self._steam_expired_warned = False
 
             rich_presence_text = None
@@ -81,7 +81,7 @@ class SteamScraper:
                                 val = cells[1].get_text().strip()
                                 if val and '#' not in val:
                                     rich_presence_text = val
-                                    logger.debug(f"✅ Rich Presence encontrado via fallback 'status': {val}")
+                                    logger.debug(f"✅ Rich Presence found via 'status' fallback: {val}")
                                     break
                 
                 # 2. Extraer steam_player_group_size
@@ -108,7 +108,7 @@ class SteamScraper:
             if rich_presence_text:
                 if rich_presence_text != self._last_presence:
                     self._last_presence = rich_presence_text
-                    logger.info(f"🎮 Rich Presence (nuevo): {rich_presence_text}")
+                    logger.info(f"🎮 Rich Presence (new): {rich_presence_text}")
             
             return rich_presence_text, group_size
             
@@ -137,7 +137,7 @@ class SteamScraper:
                             group_size = int(group_size_text)
                             if group_size != self._last_group_size:
                                 self._last_group_size = group_size
-                                logger.info(f"👥 Group size detectado: {group_size}")
+                                logger.info(f"👥 Group size detected: {group_size}")
                             return group_size
             
             # Si no se encuentra steam_player_group_size, buscar patrones alternativos
@@ -145,7 +145,7 @@ class SteamScraper:
             return group_size
             
         except Exception as e:
-            logger.debug(f"Error extrayendo group size: {e}")
+            logger.debug(f"Failed to extract group size: {e}")
             return None
     
     def _find_alternative_group_size(self, soup) -> Optional[int]:
@@ -162,7 +162,7 @@ class SteamScraper:
                     parts = text.split('/')
                     if len(parts) == 2 and parts[0].isdigit():
                         current_players = int(parts[0])
-                        logger.info(f"👥 Group size alternativo detectado: {current_players}")
+                        logger.info(f"👥 Alternative group size detected: {current_players}")
                         return current_players
             
             # Método 2: Buscar números que representen cantidad de jugadores
@@ -171,12 +171,12 @@ class SteamScraper:
                 if text.isdigit():
                     num = int(text)
                     if 1 <= num <= 16:  # Rango razonable para grupos de juego
-                        logger.info(f"👥 Group size numérico detectado: {num}")
+                        logger.info(f"👥 Numeric group size detected: {num}")
                         return num
             
             return None
         except Exception as e:
-            logger.debug(f"Error en búsqueda alternativa de group size: {e}")
+            logger.debug(f"Error in alternative group size lookup: {e}")
             return None
             
 def find_steam_appid_by_name(game_name: str) -> Optional[str]:
@@ -192,5 +192,5 @@ def find_steam_appid_by_name(game_name: str) -> Optional[str]:
                 if data:    
                     return str(data[0].get("appid"))
     except Exception as e:
-        logger.error(f"Error buscando Steam AppID: {e}")
+        logger.error(f"Failed to look up Steam AppID: {e}")
     return None

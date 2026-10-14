@@ -43,12 +43,12 @@ class IntegrityHandlerMixin(Base):
             config_ok = False
             
         if not config_ok:
-            logger.info("Verificar Integridad: games_config_merged.json no existe o está corrupto. Descargando de GitHub...")
+            logger.info("Verify Integrity: games_config_merged.json is missing or corrupt. Downloading from GitHub...")
             data = download_from_github("games_config_merged.json")
             if validate_games_config(data):
                 save_json(data, fixed_path)
                 self.pm.games_map = data
-                logger.info("✅ games_config_merged.json restaurado y recargado con éxito.")
+                logger.info("✅ games_config_merged.json restored and reloaded successfully.")
                 self.showMessage(
                     self.texts.get("integrity_title", "Verificar Integridad"), 
                     "Archivo de configuración restaurado de GitHub correctamente.", 
@@ -56,7 +56,7 @@ class IntegrityHandlerMixin(Base):
                     3000
                 )
             else:
-                logger.error("❌ No se pudo descargar el archivo de configuración desde GitHub.")
+                logger.error("❌ Could not download the config file from GitHub.")
                 GamingMessageBox.show_warning(
                     None,
                     "Error de Integridad",
@@ -92,7 +92,7 @@ class IntegrityHandlerMixin(Base):
             is_running = AppLauncher._is_process_running_by_name("GeForce NOW")
             
         if not is_running:
-            logger.info("Verificar Integridad: GeForce NOW no está ejecutándose. Iniciando para validar...")
+            logger.info("Verify Integrity: GeForce NOW is not running. Starting it to validate...")
             AppLauncher.launch_geforce_now()
             
         # We will wait up to 8 seconds, checking visible window titles of the GFN process for corruption
@@ -131,7 +131,7 @@ class IntegrityHandlerMixin(Base):
                                 title = win32gui.GetWindowText(hwnd)
                                 if "Application Launch failed" in title or "Application resource corrupted" in title:
                                     corrupted = True
-                                    logger.warning(f"Corrupción de GFN detectada en ventana: {title}")
+                                    logger.warning(f"GFN corruption detected in window: {title}")
                                     break
                         except Exception:
                             continue
@@ -166,11 +166,11 @@ class IntegrityHandlerMixin(Base):
         
         # If GFN is corrupted, trigger repair!
         if corrupted:
-            logger.warning("Verificar Integridad: GeForce NOW corrupto detectado. Iniciando reparación...")
+            logger.warning("Verify Integrity: corrupted GeForce NOW detected. Starting repair...")
             self.on_gfn_error_detected()
         else:
             # Everything is OK!
-            logger.info("Verificar Integridad: GeForce NOW se inició sin corrupción.")
+            logger.info("Verify Integrity: GeForce NOW started without corruption.")
             
             # Show a success message
             GamingMessageBox.show_info(

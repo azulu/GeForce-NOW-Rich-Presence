@@ -221,7 +221,7 @@ class ForceGameHandlerMixin(Base):
         }
         self.pm.last_game = dict(self.pm.forced_game)
         self.pm.current_game_start_time = int(time.time())
-        logger.info(f"🎮 Juego forzado activado: {name} (id={cid})")
+        logger.info(f"🎮 Forced game enabled: {name} (id={cid})")
 
         if cid:
             try:
@@ -232,16 +232,16 @@ class ForceGameHandlerMixin(Base):
                 
                 self.pm.client_id = cid
                 self.pm._connect_rpc(cid)
-                logger.info(f"🔁 RPC reON con client_id forzado: {cid}")
+                logger.info(f"🔁 RPC reconnected with forced client_id: {cid}")
             except Exception as e:
-                logger.error(f"❌ Error reconectando RPC tras forzar juego: {e}")
+                logger.error(f"❌ Failed to reconnect RPC after forcing game: {e}")
                 threading.Thread(target=reconnect_after_delay, daemon=True).start()
 
         if exe:
             try:
                 self.pm.close_fake_executable()
             except Exception as e:
-                logger.debug(f"No se pudo cerrar ejecutable previo: {e}")
+                logger.debug(f"Could not close previous executable: {e}")
             self.pm.launch_fake_executable(exe, name)
         
         self.showMessage("OK", f"{TEXTS.get('tray_forced_game', 'Forced game')}: {name}", QSystemTrayIcon.Information, 3000)

@@ -81,9 +81,9 @@ def setup_jumplist(texts: Optional[Dict[str, str]] = None) -> bool:
         # 5. Commit tasks to destination list
         dest_list.AddUserTasks(collection)
         dest_list.CommitList()
-        logger.info("📋 Windows JumpList configurada correctamente.")
+        logger.info("📋 Windows JumpList configured successfully.")
         return True
         
     except Exception as e:
-        logger.debug(f"No se pudo registrar la JumpList de Windows: {e}")
+        logger.debug(f"Could not register the Windows JumpList: {e}")
         return False
