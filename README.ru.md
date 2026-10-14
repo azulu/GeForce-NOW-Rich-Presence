@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/asset1.jpg" alt="GeForce NOW Rich Presence Banner" width="100%" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" />
+  <img src="docs/images/asset1.jpg" alt="GeForce NOW Rich Presence Banner" width="100%" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" />
   <br/>
   <h1>🎮 GeForce NOW Rich Presence для Discord</h1>
   <p>
@@ -43,7 +43,7 @@
 ## 📸 В действии
 
 <div align="center">
-  <img src="assets/instructions.png" width="95%" alt="Discord Rich Presence Instructions" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"/>
+  <img src="docs/images/instructions.png" width="95%" alt="Discord Rich Presence Instructions" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"/>
 </div>
 
 ---

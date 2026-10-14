@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/asset1.jpg" alt="Banner de Presencia Enriquecida de GeForce NOW" width="100%" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" />
+  <img src="docs/images/asset1.jpg" alt="Banner de Presencia Enriquecida de GeForce NOW" width="100%" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" />
   <br/>
   <h1>🎮 Presencia Enriquecida de GeForce NOW para Discord</h1>
   <p>
@@ -43,7 +43,7 @@ Por defecto, Discord solo muestra un estado genérico de **"Jugando a NVIDIA GeF
 ## 📸 En Acción
 
 <div align="center">
-  <img src="assets/instrucciones.png" width="95%" alt="Discord Rich Presence Instrucciones" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"/>
+  <img src="docs/images/instrucciones.png" width="95%" alt="Discord Rich Presence Instrucciones" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"/>
 </div>
 
 ---
