@@ -50,7 +50,7 @@ class IntegrityHandlerMixin(Base):
                 self.pm.games_map = data
                 logger.info("✅ games_config_merged.json restaurado y recargado con éxito.")
                 self.showMessage(
-                    self.texts.get("integrity_title", "Verificar Integridad"), 
+                    self.texts.get("integrity_title", "Verify Integrity"), 
                     "Archivo de configuración restaurado de GitHub correctamente.", 
                     QSystemTrayIcon.Information, 
                     3000
@@ -67,13 +67,13 @@ class IntegrityHandlerMixin(Base):
         # 2. Validate GeForce NOW
         # Show a progress/status dialog to let the user know we are verifying GeForce NOW
         progress = QProgressDialog(
-            self.texts.get("verifying_gfn", "Verificando integridad de GeForce NOW..."), 
+            self.texts.get("verifying_gfn", "Verifying GeForce NOW integrity..."), 
             None, 
             0, 
             100, 
             None
         )
-        progress.setWindowTitle(self.texts.get("integrity_title", "Verificar Integridad"))
+        progress.setWindowTitle(self.texts.get("integrity_title", "Verify Integrity"))
         progress.setStyleSheet(GAMING_STYLESHEET)
         progress.setWindowModality(Qt.ApplicationModal)
         progress.setAutoClose(True)
@@ -175,8 +175,8 @@ class IntegrityHandlerMixin(Base):
             # Show a success message
             GamingMessageBox.show_info(
                 None, 
-                self.texts.get("integrity_title", "Verificar Integridad"), 
-                self.texts.get("integrity_ok_msg", "Todos los archivos de configuración e instalaciones están en perfecto estado.")
+                self.texts.get("integrity_title", "Verify Integrity"), 
+                self.texts.get("integrity_ok_msg", "All configuration files and GeForce NOW installation are in perfect condition.")
             )
 
     def on_download_progress(self, current, total):
@@ -197,7 +197,7 @@ class IntegrityHandlerMixin(Base):
                 return
 
             if not getattr(self, '_download_progress_dlg', None):
-                cancel_text = getattr(self, 'texts', {}).get("cancel", "Cancelar")
+                cancel_text = getattr(self, 'texts', {}).get("cancel", "Cancel")
                 self._download_progress_dlg = QProgressDialog("Descargando lista de juegos...", cancel_text, 0, total if total > 0 else 0, None)
                 self._download_progress_dlg.setStyleSheet(GAMING_STYLESHEET)
                 self._download_progress_dlg.setWindowModality(Qt.WindowModal)

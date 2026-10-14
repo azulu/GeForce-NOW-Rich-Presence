@@ -32,7 +32,7 @@ class QuestListDialog(QDialog):
         layout.setContentsMargins(15, 15, 15, 15)
         layout.setSpacing(10)
         
-        lbl = QLabel(TEXTS.get("active_games", "Juegos activos (15 minutos máx.)"))
+        lbl = QLabel(TEXTS.get("active_games", "Active Games (15 minutes max.)"))
         lbl.setObjectName("title_label")
         lbl.setAlignment(Qt.AlignCenter)
         layout.addWidget(lbl)
@@ -47,11 +47,11 @@ class QuestListDialog(QDialog):
         layout.addWidget(self.list_widget)
         
         # Add new game button
-        add_btn = QPushButton(TEXTS.get("force_new_game", "Forzar Nuevo Juego"))
+        add_btn = QPushButton(TEXTS.get("force_new_game", "Force New Game"))
         add_btn.clicked.connect(self.on_add_game)
         layout.addWidget(add_btn)
         
-        self.close_btn = QPushButton(TEXTS.get("close_window", "Cerrar Ventana (Juegos continuarán)"))
+        self.close_btn = QPushButton(TEXTS.get("close_window", "Close Window (Games will continue)"))
         self.close_btn.setObjectName("secondary")
         self.close_btn.clicked.connect(self.accept)
         layout.addWidget(self.close_btn)

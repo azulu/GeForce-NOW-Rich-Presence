@@ -48,7 +48,7 @@ class ForceGameHandlerMixin(Base):
             
         def on_update_list_opened():
             dialog.set_updating(True)
-            self.showMessage("Info", TEXTS.get("downloading", "Descargando lista de juegos de Discord..."), QSystemTrayIcon.Information, 4000)
+            self.showMessage("Info", TEXTS.get("downloading", "Downloading..."), QSystemTrayIcon.Information, 4000)
             QApplication.processEvents()
 
             def on_progress(cur, tot):

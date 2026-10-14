@@ -371,7 +371,7 @@ class GamingLogViewerDialog(QDialog):
     def __init__(self, texts=None, parent=None):
         super().__init__(parent)
         self.texts = texts if texts is not None else TEXTS
-        self.setWindowTitle(self.texts.get("log_viewer_title", "Visor de Registros (Logs)"))
+        self.setWindowTitle(self.texts.get("log_viewer_title", "Application Log Viewer"))
         self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.setStyleSheet(GAMING_STYLESHEET)
@@ -382,12 +382,12 @@ class GamingLogViewerDialog(QDialog):
         layout.setSpacing(12)
         
         # Header
-        title = QLabel(self.texts.get("log_viewer_title", "Visor de Registros (Logs)"))
+        title = QLabel(self.texts.get("log_viewer_title", "Application Log Viewer"))
         title.setObjectName("title_label")
         title.setAlignment(Qt.AlignCenter)
         layout.addWidget(title)
         
-        desc = QLabel(self.texts.get("log_viewer_desc", "Historial de eventos de la aplicación. Si experimentas problemas, puedes exportar este archivo y enviarlo."))
+        desc = QLabel(self.texts.get("log_viewer_desc", "Application event history. If you experience issues, you can export this file to send it."))
         desc.setWordWrap(True)
         desc.setAlignment(Qt.AlignCenter)
         desc.setStyleSheet("font-size: 13px; color: #cfcfcf; padding-bottom: 5px;")

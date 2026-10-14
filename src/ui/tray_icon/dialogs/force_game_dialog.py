@@ -45,14 +45,14 @@ class AskGameDialog(QDialog):
         sec_btns_layout = QVBoxLayout()
         sec_btns_layout.setSpacing(10)
 
-        self.quest_mode_btn = QPushButton(self.texts.get("quest_mode", "Misiones de Discord (Múltiples Juegos)"))
+        self.quest_mode_btn = QPushButton(self.texts.get("quest_mode", "Discord Quest Mode (Multiple Games)"))
         self.quest_mode_btn.setObjectName("secondary")
         self.quest_mode_btn.setAutoDefault(False)
         self.quest_mode_btn.clicked.connect(self.on_quest_mode_clicked)
         self.quest_mode_btn.setStyleSheet("padding: 10px; font-size: 13px;")
         sec_btns_layout.addWidget(self.quest_mode_btn)
 
-        self.orig_update_text = self.texts.get("update_list", "Actualizar base de datos de juegos")
+        self.orig_update_text = self.texts.get("update_list", "Update games database")
         self.update_list_btn = QPushButton(self.orig_update_text)
         self.update_list_btn.setObjectName("secondary")
         self.update_list_btn.setAutoDefault(False)
@@ -94,14 +94,14 @@ class AskGameDialog(QDialog):
     def set_updating(self, is_updating: bool):
         if is_updating:
             self.update_list_btn.setEnabled(False)
-            downloading_str = self.texts.get("downloading", "Descargando...")
+            downloading_str = self.texts.get("downloading", "Downloading...")
             self.update_list_btn.setText(f" {downloading_str}")
         else:
             self.update_list_btn.setEnabled(True)
             self.update_list_btn.setText(self.orig_update_text)
 
     def update_download_progress(self, current: int, total: int):
-        downloading_str = self.texts.get("downloading", "Descargando...")
+        downloading_str = self.texts.get("downloading", "Downloading...")
         if total > 0 and current > 0:
             def fmt(sz):
                 if sz < 1024 * 1024:
@@ -114,11 +114,11 @@ class AskGameDialog(QDialog):
     def set_update_result(self, success: bool, count: int = 0):
         self.update_list_btn.setEnabled(True)
         if success:
-            success_text = self.texts.get("updated_success", "¡Base de datos actualizada!")
+            success_text = self.texts.get("updated_success", "Database updated!")
             msg = f"✅ {success_text} ({count} apps)" if count else f"✅ {success_text}"
             self.update_list_btn.setText(msg)
         else:
-            err_text = self.texts.get("update_error", "Error al actualizar")
+            err_text = self.texts.get("update_error", "Error updating")
             self.update_list_btn.setText(f"❌ {err_text}")
 
         QTimer.singleShot(4000, lambda: self.update_list_btn.setText(self.orig_update_text))
@@ -128,7 +128,7 @@ class MatchSelectionDialog(QDialog):
     def __init__(self, game_key, candidates, parent=None):
         super().__init__(parent)
 
-        title_text = TEXTS.get("match_title", "Coincidencias para: {busqueda}").replace("{busqueda}", game_key)
+        title_text = TEXTS.get("match_title", "Matches for: {busqueda}").replace("{busqueda}", game_key)
         self.setWindowTitle(title_text)
         self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
         self.setMinimumWidth(540)
@@ -146,9 +146,9 @@ class MatchSelectionDialog(QDialog):
         
         self.table_widget = QTableWidget(len(candidates), 3)
         self.table_widget.setHorizontalHeaderLabels([
-            TEXTS.get("match_col_name", "Nombre"),
-            TEXTS.get("match_col_score", "Coincidencia"),
-            TEXTS.get("match_col_quests", "Misiones de discord")
+            TEXTS.get("match_col_name", "Name"),
+            TEXTS.get("match_col_score", "Match"),
+            TEXTS.get("match_col_quests", "Discord Quests")
         ])
         
         self.table_widget.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -205,10 +205,10 @@ class MatchSelectionDialog(QDialog):
 
         btn_layout = QHBoxLayout()
 
-        self.confirm_btn = QPushButton(TEXTS.get("confirm", "Confirmar"))
+        self.confirm_btn = QPushButton(TEXTS.get("confirm", "Confirm"))
         self.confirm_btn.clicked.connect(self.on_confirm)
 
-        self.ignore_btn = QPushButton(TEXTS.get("ignore", "Ignorar"))
+        self.ignore_btn = QPushButton(TEXTS.get("ignore", "Ignore"))
         self.ignore_btn.setObjectName("secondary")
         self.ignore_btn.clicked.connect(self.reject)
 
@@ -226,6 +226,6 @@ class MatchSelectionDialog(QDialog):
         else:
             GamingMessageBox.show_warning(
                 self,
-                TEXTS.get("selection_required", "Selección requerida"),
-                TEXTS.get("selection_required_msg", "Por favor selecciona una opción de la lista.")
+                TEXTS.get("selection_required", "Selection required"),
+                TEXTS.get("selection_required_msg", "Please select an option from the list.")
             )

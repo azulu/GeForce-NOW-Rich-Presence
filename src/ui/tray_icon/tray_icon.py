@@ -124,7 +124,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             state = "active"
             gname = active.get('name', 'Unknown')
             if gname == "GeForce NOW":
-                text = TEXTS.get("status_searching", "Buscando juego...")
+                text = TEXTS.get("status_searching", "Searching for game...")
             else:
                 text = TEXTS.get("status_active", "Active: {game}").replace("{game}", gname)
         else:
@@ -155,7 +155,7 @@ class SystemTrayIcon(QSystemTrayIcon,
                 if path.exists():
                     status_action.setIcon(QIcon(str(path)))
             
-            disc_status = "Discord: " + (TEXTS.get("status_connected", "Conectado") if discord_connected else TEXTS.get("status_disconnected", "Desconectado"))
+            disc_status = "Discord: " + (TEXTS.get("status_connected", "Connected") if discord_connected else TEXTS.get("status_disconnected", "Disconnected"))
             disc_action = self.menu.addAction(disc_status)
             disc_action.setEnabled(False)
             disc_icon = "status-check.svg" if discord_connected else "status-failed.svg"
@@ -175,32 +175,32 @@ class SystemTrayIcon(QSystemTrayIcon,
         
         # Block 1: QUICK ACTION
         if IS_WINDOWS:
-            self.menu.addAction(SectionHeaderAction(TEXTS.get("tray_sec_quick_action", "Acción Rápida"), self.menu))
+            self.menu.addAction(SectionHeaderAction(TEXTS.get("tray_sec_quick_action", "Quick Action"), self.menu))
         else:
-            header = self.menu.addAction(TEXTS.get("tray_sec_quick_action", "Acción Rápida").upper())
+            header = self.menu.addAction(TEXTS.get("tray_sec_quick_action", "Quick Action").upper())
             header.setEnabled(False)
         
         # 1.1 Force Game
         if IS_WINDOWS:
-            force_text = TEXTS.get("tray_force_game", "Forzar juego...")
+            force_text = TEXTS.get("tray_force_game", "Force game...")
             force_action = CustomMenuItemAction(force_text, "crosshair.svg", parent=self.menu)
             force_action.triggered.connect(self.toggle_force_game)
             self.menu.addAction(force_action)
             
             # 1.2 Open GeForce NOW
-            open_gfn_text = TEXTS.get("tray_open_gfn", "Abrir GeForce NOW")
+            open_gfn_text = TEXTS.get("tray_open_gfn", "Open GeForce NOW")
             open_gfn_action = CustomMenuItemAction(open_gfn_text, "nvidia-color.svg", parent=self.menu)
             open_gfn_action.triggered.connect(self.open_geforce)
             self.menu.addAction(open_gfn_action)
 
             # 1.3 Open Discord
-            open_discord_text = TEXTS.get("tray_open_discord", "Abrir Discord")
+            open_discord_text = TEXTS.get("tray_open_discord", "Open Discord")
             open_discord_action = CustomMenuItemAction(open_discord_text, "discord-color.svg", parent=self.menu)
             open_discord_action.triggered.connect(self.open_discord)
             self.menu.addAction(open_discord_action)
         
         # 1.4 Get Steam cookie
-        cookie_text = TEXTS.get("tray_get_cookie", "Obtener cookie de Steam")
+        cookie_text = TEXTS.get("tray_get_cookie", "Configure Steam Cookie")
         if IS_WINDOWS:
             cookie_action = CustomMenuItemAction(cookie_text, "steam-color.svg", parent=self.menu)
             cookie_action.triggered.connect(self.obtain_cookie)
@@ -218,9 +218,9 @@ class SystemTrayIcon(QSystemTrayIcon,
         active_game = self.pm.forced_game or self.pm.last_game
         if active_game:
             if IS_WINDOWS:
-                self.menu.addAction(SectionHeaderAction(TEXTS.get("tray_sec_custom_presence", "Presencia Personalizada"), self.menu))
+                self.menu.addAction(SectionHeaderAction(TEXTS.get("tray_sec_custom_presence", "Custom Presence"), self.menu))
             else:
-                header = self.menu.addAction(TEXTS.get("tray_sec_custom_presence", "Presencia Personalizada").upper())
+                header = self.menu.addAction(TEXTS.get("tray_sec_custom_presence", "Custom Presence").upper())
                 header.setEnabled(False)
             
             gname = active_game.get("name", "Unknown")
@@ -241,13 +241,13 @@ class SystemTrayIcon(QSystemTrayIcon,
             
         # Block 3: TOOLS
         if IS_WINDOWS:
-            self.menu.addAction(SectionHeaderAction(TEXTS.get("tray_sec_tools", "Herramientas"), self.menu))
+            self.menu.addAction(SectionHeaderAction(TEXTS.get("tray_sec_tools", "Tools"), self.menu))
         else:
-            header = self.menu.addAction(TEXTS.get("tray_sec_tools", "Herramientas").upper())
+            header = self.menu.addAction(TEXTS.get("tray_sec_tools", "Tools").upper())
             header.setEnabled(False)
         
         # 3.1 View logs
-        logs_text = TEXTS.get("tray_tools_logs", "Ver logs")
+        logs_text = TEXTS.get("tray_tools_logs", "View logs")
         if IS_WINDOWS:
             logs_action = CustomMenuItemAction(logs_text, "gear.svg", parent=self.menu)
             logs_action.triggered.connect(self.open_logs)
@@ -261,13 +261,13 @@ class SystemTrayIcon(QSystemTrayIcon,
 
         # 3.2 Verify integrity
         if IS_WINDOWS:
-            integrity_text = TEXTS.get("tray_tools_integrity", "Verificar integridad")
+            integrity_text = TEXTS.get("tray_tools_integrity", "Verify integrity")
             integrity_action = CustomMenuItemAction(integrity_text, "activity.svg", parent=self.menu)
             integrity_action.triggered.connect(self.verify_integrity)
             self.menu.addAction(integrity_action)
 
         # 3.3 Join Discord
-        invite_text = TEXTS.get("tray_discord_invite_gfn", "Entra al servidor de GeForce NOW")
+        invite_text = TEXTS.get("tray_discord_invite_gfn", "Join the GeForce NOW Server")
         if IS_WINDOWS:
             invite_action = CustomMenuItemAction(invite_text, "discord.svg", parent=self.menu)
             invite_action.triggered.connect(lambda: webbrowser.open("https://discord.gg/kHUvndZnw7"))
@@ -280,38 +280,38 @@ class SystemTrayIcon(QSystemTrayIcon,
             invite_action.triggered.connect(lambda: webbrowser.open("https://discord.gg/kHUvndZnw7"))
 
         # 3.4 Startup Preferences Submenu
-        startup_menu = QMenu(TEXTS.get("tray_startup_options", "Preferencias"), self.menu)
+        startup_menu = QMenu(TEXTS.get("tray_startup_options", "Startup preferences"), self.menu)
         icon_pixmap = QPixmap(str(ASSETS_DIR / "iconos" / "startup.svg")).scaled(16, 16, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         startup_menu.setIcon(QIcon(icon_pixmap))
         startup_menu.setStyleSheet(self.menu.styleSheet())
         
         # 1. Start with Windows
         if IS_WINDOWS:
-            self.opt_start_windows = startup_menu.addAction(TEXTS.get("config_start_windows", "Iniciar con Windows"))
+            self.opt_start_windows = startup_menu.addAction(TEXTS.get("config_start_windows", "Start with Windows"))
             self.opt_start_windows.setCheckable(True)
             self.opt_start_windows.setChecked(self.config_manager.get_setting("start_with_windows", False))
             self.opt_start_windows.triggered.connect(self.toggle_start_with_windows)
             
             # 2. Start GFN on Launch
-            self.opt_start_gfn = startup_menu.addAction(TEXTS.get("config_start_gfn", "Iniciar GeForce NOW al abrir"))
+            self.opt_start_gfn = startup_menu.addAction(TEXTS.get("config_start_gfn", "Start GeForce NOW on launch"))
             self.opt_start_gfn.setCheckable(True)
             self.opt_start_gfn.setChecked(self.config_manager.get_setting("start_gfn_on_launch", True))
             self.opt_start_gfn.triggered.connect(lambda checked: self.config_manager.set_setting("start_gfn_on_launch", checked))
             
             # 3. Start Discord on Launch
-            self.opt_start_discord = startup_menu.addAction(TEXTS.get("config_start_discord", "Iniciar Discord al abrir"))
+            self.opt_start_discord = startup_menu.addAction(TEXTS.get("config_start_discord", "Start Discord on launch"))
             self.opt_start_discord.setCheckable(True)
             self.opt_start_discord.setChecked(self.config_manager.get_setting("start_discord_on_launch", False))
             self.opt_start_discord.triggered.connect(lambda checked: self.config_manager.set_setting("start_discord_on_launch", checked))
         
         # 4. Get Cookie on Launch
-        self.opt_get_cookie = startup_menu.addAction(TEXTS.get("config_get_cookie", "Obtener cookie al iniciar la aplicación"))
+        self.opt_get_cookie = startup_menu.addAction(TEXTS.get("config_get_cookie", "Get cookie on launch"))
         self.opt_get_cookie.setCheckable(True)
         self.opt_get_cookie.setChecked(self.config_manager.get_setting("get_cookie_on_launch", False))
         self.opt_get_cookie.triggered.connect(lambda checked: self.config_manager.set_setting("get_cookie_on_launch", checked))
         
         # 5. Show Lobby Status
-        self.opt_show_lobby = startup_menu.addAction(TEXTS.get("config_show_lobby", "Mostrar GeForce NOW cuando no hay juego activo"))
+        self.opt_show_lobby = startup_menu.addAction(TEXTS.get("config_show_lobby", "Show GeForce NOW when no game is active"))
         self.opt_show_lobby.setCheckable(True)
         self.opt_show_lobby.setChecked(self.config_manager.get_setting("show_lobby_status", True))
         self.opt_show_lobby.triggered.connect(lambda checked: self.config_manager.set_setting("show_lobby_status", checked))
@@ -319,7 +319,7 @@ class SystemTrayIcon(QSystemTrayIcon,
         self.menu.addMenu(startup_menu)
         
         # 3.5 Language Submenu
-        lang_menu = QMenu(TEXTS.get("tray_language", "Idioma"), self.menu)
+        lang_menu = QMenu(TEXTS.get("tray_language", "Language"), self.menu)
         lang_pixmap = QPixmap(str(ASSETS_DIR / "iconos" / "sync.svg")).scaled(16, 16, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         
         # Tint language icon to #b0b3b8 to match the other unhovered icons
@@ -350,7 +350,7 @@ class SystemTrayIcon(QSystemTrayIcon,
         
         # Block 4: Footer Actions
         # 4.1 Check updates
-        update_text = TEXTS.get("tray_check_updates", "Buscar actualizaciones")
+        update_text = TEXTS.get("tray_check_updates", "Check updates...")
         if IS_WINDOWS:
             update_action = CustomMenuItemAction(update_text, "update.svg", parent=self.menu)
             update_action.triggered.connect(self.manual_check_updates)
@@ -363,7 +363,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             update_action.triggered.connect(self.manual_check_updates)
         
         # 4.2 About
-        about_text = TEXTS.get("tray_about", "Acerca de")
+        about_text = TEXTS.get("tray_about", "About")
         if IS_WINDOWS:
             about_action = CustomMenuItemAction(about_text, "info.svg", parent=self.menu)
             about_action.triggered.connect(self.open_about)
@@ -378,7 +378,7 @@ class SystemTrayIcon(QSystemTrayIcon,
         self.menu.addSeparator()
         
         # 4.3 Exit
-        exit_text = TEXTS.get("tray_exit", "Salir")
+        exit_text = TEXTS.get("tray_exit", "Exit")
         if IS_WINDOWS:
             exit_action = CustomMenuItemAction(exit_text, "can.svg", is_danger=True, parent=self.menu)
             exit_action.triggered.connect(QApplication.instance().quit)
@@ -422,7 +422,7 @@ class SystemTrayIcon(QSystemTrayIcon,
                     GamingMessageBox.show_warning(
                         None,
                         TEXTS.get("tray_title", "GeForce NOW Presence"),
-                        TEXTS.get("startup_disabled_in_tm", "Deshabilitado en Administrador de tareas")
+                        TEXTS.get("startup_disabled_in_tm", "Disabled in Task Manager")
                     )
         except Exception as e:
             logger.error(f"Error toggling startup shortcut: {e}")
@@ -454,8 +454,8 @@ class SystemTrayIcon(QSystemTrayIcon,
         lang_name = available_langs.get(lang_code, lang_code.upper())
         
         from src.ui.dialogs import GamingMessageBox
-        title = TEXTS.get("restart_confirm_title", "Cambiar idioma")
-        msg = TEXTS.get("restart_confirm_msg", "¿Quieres cambiar el idioma a {lang_name} y reiniciar la aplicación ahora?").replace("{lang_name}", lang_name)
+        title = TEXTS.get("restart_confirm_title", "Change Language")
+        msg = TEXTS.get("restart_confirm_msg", "Do you want to change the language to {lang_name} and restart the application now?").replace("{lang_name}", lang_name)
         
         if GamingMessageBox.show_question(None, title, msg):
             from src.core.utils import save_lang_to_registry

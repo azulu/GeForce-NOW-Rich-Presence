@@ -328,7 +328,7 @@ class AboutDialog(QDialog):
         layout.addLayout(logo_layout)
         
         # 4. Description Label
-        self.desc_label = QLabel(self.texts.get("about_desc_1", "GeForce NOW Rich Presence mejora tu experiencia en Discord\nmostrando lo que juegas en tiempo real"))
+        self.desc_label = QLabel(self.texts.get("about_desc_1", "GeForce NOW Rich Presence improves your Discord experience\nby showing what you are playing in real time"))
         self.desc_label.setAlignment(Qt.AlignCenter)
         self.desc_label.setStyleSheet("""
             color: #ffffff;
@@ -338,7 +338,7 @@ class AboutDialog(QDialog):
         """)
         layout.addWidget(self.desc_label)
 
-        self.desc_label2 = QLabel(self.texts.get("about_desc_2", "Hecho para la comunidad de GeForce NOW y Discord."))
+        self.desc_label2 = QLabel(self.texts.get("about_desc_2", "Made for the GeForce NOW and Discord community."))
         self.desc_label2.setAlignment(Qt.AlignCenter)
         self.desc_label2.setStyleSheet("""
             color: #7A7A7A;
@@ -377,7 +377,7 @@ class AboutDialog(QDialog):
         dev_layout.setSpacing(4)
         dev_layout.setAlignment(Qt.AlignLeft)
         
-        dev_lbl = QLabel(self.texts.get("about_dev_by", "Este proyecto fue desarrollado con cariño por"))
+        dev_lbl = QLabel(self.texts.get("about_dev_by", "This project was developed with love by"))
         dev_lbl.setStyleSheet("""
             color: #ffffff;
             font-size: 13px;
@@ -401,7 +401,7 @@ class AboutDialog(QDialog):
         
         text_vbox.addLayout(dev_layout)
         
-        support_lbl = QLabel(self.texts.get("about_support", "Si te gusta este proyecto, considera apoyar su desarrollo."))
+        support_lbl = QLabel(self.texts.get("about_support", "If you like this project, consider supporting its development."))
         support_lbl.setStyleSheet("""
             color: #8a8d90;
             font-size: 12px;
@@ -419,9 +419,9 @@ class AboutDialog(QDialog):
         social_layout.setAlignment(Qt.AlignCenter)
         social_layout.setSpacing(35)
         
-        btn_github = SocialButton(self.texts.get("about_btn_repo", "Ver repositorio"), "github.svg", "https://github.com/KarmaDevz/GeForce-NOW-Rich-Presence", is_circular=False)
-        btn_discord = SocialButton(self.texts.get("about_btn_server", "Entrar al servidor"), "discord.svg", "https://discord.gg/kHUvndZnw7", is_circular=True, bg_color="#5865F2")
-        btn_paypal = SocialButton(self.texts.get("about_btn_support", "Apóyame"), "paypal.png", "https://www.paypal.com/paypalme/KarmaDevz", is_circular=True, bg_color="#0079C1")
+        btn_github = SocialButton(self.texts.get("about_btn_repo", "View repository"), "github.svg", "https://github.com/KarmaDevz/GeForce-NOW-Rich-Presence", is_circular=False)
+        btn_discord = SocialButton(self.texts.get("about_btn_server", "Join server"), "discord.svg", "https://discord.gg/kHUvndZnw7", is_circular=True, bg_color="#5865F2")
+        btn_paypal = SocialButton(self.texts.get("about_btn_support", "Support me"), "paypal.png", "https://www.paypal.com/paypalme/KarmaDevz", is_circular=True, bg_color="#0079C1")
         
         social_layout.addWidget(btn_github)
         social_layout.addWidget(btn_discord)

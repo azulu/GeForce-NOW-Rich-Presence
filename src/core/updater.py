@@ -592,7 +592,7 @@ class UpdateDialog(QDialog):
                 GamingMessageBox.show_warning(
                     self, 
                     t.get("error_title", "Error"), 
-                    t.get("permission_error_message", "No se tienen permisos de escritura en la carpeta de instalación. Intente ejecutar la aplicación como administrador o realice la actualización manualmente.")
+                    t.get("permission_error_message", "No write permission in the installation folder. Try running the application as administrator or update manually.")
                 )
                 self.btn_update.setEnabled(True)
                 self.btn_cancel.setEnabled(True)

@@ -88,7 +88,7 @@ class ConfigManager:
         if data is not None:
             self.games_config = data
             self.games_config_path = fixed_path
-            logger.info(TEXTS.get("games_config_merged", "✅ games_config_merged.json cargado automáticamente: {fixed_path}").format(fixed_path=fixed_path))
+            logger.info(TEXTS.get("games_config_merged", "✅ games_config_merged.json loaded automatically").format(fixed_path=fixed_path))
             self._log_games_summary()
             
             # Crear copia de respaldo local si no existe
@@ -106,10 +106,10 @@ class ConfigManager:
     def _log_games_summary(self, verbose=False):
         count = len(self.games_config)
         if count == 0:
-            logger.warning(TEXTS.get("no_games_found", "⚠️ No se encontraron juegos en la configuración."))
+            logger.warning(TEXTS.get("no_games_found", "No games found in the configuration."))
             return
         
-        logger.info(TEXTS.get("games_loaded", "📦 Juegos cargados: {count}").format(count=count))
+        logger.info(TEXTS.get("games_loaded", "📦 Games loaded: {count}").format(count=count))
 
     def get_game_mapping(self):
         return self.games_config

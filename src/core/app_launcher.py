@@ -185,11 +185,11 @@ class AppLauncher:
         for proc in psutil.process_iter(attrs=['name']):
             name = (proc.info.get('name') or "").lower()
             if "discord" in name and "update" not in name:
-                logger.info(TEXTS.get("already_running_discord", "💡 Discord ya está en ejecución"))
+                logger.info(TEXTS.get("already_running_discord", "💡 Discord is already running"))
                 return
         updater = AppLauncher.find_discord()
         if updater:
-            logger.info(TEXTS.get("launching_discord", "🚀 Iniciando Discord..."))
+            logger.info(TEXTS.get("launching_discord", "🚀 Launching Discord..."))
             if sys.platform == "darwin":
                 subprocess.Popen(["open", "-a", updater])
             else:

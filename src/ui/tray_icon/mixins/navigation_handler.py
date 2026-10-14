@@ -41,7 +41,7 @@ class NavigationHandlerMixin(Base):
                     is_running = True
                     break
             if is_running:
-                self.showMessage("Discord", TEXTS.get("already_running_discord", "💡 Discord ya se está ejecutando"), QSystemTrayIcon.Information, 3000)
+                self.showMessage("Discord", TEXTS.get("already_running_discord", "💡 Discord is already running"), QSystemTrayIcon.Information, 3000)
             else:
                 GamingMessageBox.show_warning(None, TEXTS.get("tray_open_discord", "Open Discord"), TEXTS.get("discord_not_found_msg", "Discord not found at the default location."))
         else:

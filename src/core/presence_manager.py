@@ -1554,7 +1554,7 @@ class PresenceManager(QObject):
                     "name": "GeForce NOW",
                     "client_id": "1095416975028650046",
                     "image": "geforce",
-                    "custom_details": self.texts.get("lobby_status", "En el menú principal"),
+                    "custom_details": self.texts.get("lobby_status", "In the main menu"),
                 }
 
         # Check if game has actually changed using the resolved game dicts
@@ -1757,7 +1757,7 @@ class PresenceManager(QObject):
 
         # Ensure details has fallback so Discord Rich Presence always displays card content
         if not details and not state:
-            details = self.texts.get("playing_on_gfn", "En GeForce NOW")
+            details = self.texts.get("playing_on_gfn", "On GeForce NOW")
 
         presence_data = {
             "details": details,
@@ -1767,7 +1767,7 @@ class PresenceManager(QObject):
             "small_image": None,
             "start": self.current_game_start_time,
             "buttons": [
-                {"label": self.texts.get("play_on_gfn", "Jugar en GeForce NOW"), "url": "https://play.geforcenow.com/mall/"},
+                {"label": self.texts.get("play_on_gfn", "Play on GeForce NOW"), "url": "https://play.geforcenow.com/mall/"},
                 {"label": "GFN Rich Presence", "url": "https://github.com/KarmaDevz/GeForce-NOW-Rich-Presence"}
             ]
         }
@@ -1863,7 +1863,7 @@ class PresenceManager(QObject):
             state = "active"
             gname = active.get('name', 'Unknown')
             if gname == "GeForce NOW":
-                text = self.texts.get("status_searching", "Buscando juego...")
+                text = self.texts.get("status_searching", "Searching for game...")
             else:
                 text = self.texts.get("status_active", "Active: {game}").replace("{game}", gname)
         else:

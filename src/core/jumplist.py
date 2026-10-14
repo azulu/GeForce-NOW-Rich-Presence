@@ -44,8 +44,8 @@ def setup_jumplist(texts: Optional[Dict[str, str]] = None) -> bool:
         )
         
         # 4. Create Task: "Ver Registros (Logs)"
-        task_title = (texts or {}).get("jumplist_view_logs", "Ver Registros (Logs)")
-        task_desc = (texts or {}).get("jumplist_view_logs_desc", "Abrir el visor de registros de GeForce Presence")
+        task_title = (texts or {}).get("jumplist_view_logs", "View Logs")
+        task_desc = (texts or {}).get("jumplist_view_logs_desc", "Open the GeForce Presence log viewer")
         
         link = pythoncom.CoCreateInstance(
             shell.CLSID_ShellLink,

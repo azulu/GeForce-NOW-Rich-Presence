@@ -30,8 +30,8 @@ class CookieHandlerMixin(Base):
         
         cookie_val, ok = GamingTextInputDialog.get_text(
             None,
-            TEXTS.get("cookie_manual_title", "Configuración de Cookie de Steam"),
-            TEXTS.get("cookie_manual_label", "Pega el valor de tu cookie 'steamLoginSecure':"),
+            TEXTS.get("cookie_manual_title", "Steam Cookie Configuration"),
+            TEXTS.get("cookie_manual_label", "Paste your 'steamLoginSecure' value (see instrucciones.md):"),
             current_cookie
         )
 
@@ -49,7 +49,7 @@ class CookieHandlerMixin(Base):
                 logger.info("Cookie de Steam eliminada de la configuración.")
                 self.showMessage(
                     TEXTS.get("cookie_title", "Cookie"),
-                    TEXTS.get("cookie_removed", "Cookie de Steam eliminada."),
+                    TEXTS.get("cookie_removed", "Steam cookie removed from configuration."),
                     QSystemTrayIcon.Information,
                     3000
                 )
@@ -63,7 +63,7 @@ class CookieHandlerMixin(Base):
             logger.info("✅ Cookie de Steam configurada y validada exitosamente.")
             self.showMessage(
                 TEXTS.get("cookie_title", "Cookie"),
-                TEXTS.get("cookie_saved", "Cookie de Steam guardada y validada exitosamente."),
+                TEXTS.get("cookie_saved", "Steam cookie saved to .env successfully."),
                 QSystemTrayIcon.Information,
                 3000
             )
@@ -72,5 +72,5 @@ class CookieHandlerMixin(Base):
             GamingMessageBox.show_warning(
                 None,
                 TEXTS.get("cookie_title", "Cookie"),
-                TEXTS.get("cookie_invalid_msg", "La cookie introducida es inválida o ha expirado. Por favor, compruébala e inténtalo de nuevo.")
+                TEXTS.get("cookie_invalid_msg", "The cookie entered is invalid or expired. Please check it and try again.")
             )
