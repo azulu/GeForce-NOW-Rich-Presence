@@ -8,7 +8,7 @@ from PyQt5.QtGui import QIcon, QPixmap, QPainter, QColor
 # pyrefly: ignore [missing-import]
 from PyQt5.QtCore import Qt
 
-from src.core.utils import get_lang_from_registry, load_locale, LANG_DIR, IS_WINDOWS
+from src.core.utils import get_lang_from_registry, load_locale, LANG_DIR, IS_WINDOWS, IS_LINUX
 from src.version import VERSION
 from .constants import ASSETS_DIR
 from .widgets import StatusWidgetAction, CustomMenuItemAction, SectionHeaderAction, VersionLabelAction
@@ -91,7 +91,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             self.updater.update_status_changed.connect(self.update_menu)
 
         self.create_menu()
-        if IS_WINDOWS:
+        if IS_WINDOWS or IS_LINUX:
             self.setContextMenu(self.menu)
         
         # Connect signals
@@ -403,6 +403,9 @@ class SystemTrayIcon(QSystemTrayIcon,
         self.create_menu()
 
     def on_activated(self, reason):
+        # On Linux the tray host shows the context menu itself (StatusNotifierItem)
+        if IS_LINUX:
+            return
         if not IS_WINDOWS and reason in (QSystemTrayIcon.Trigger, QSystemTrayIcon.Context):
             from PyQt5.QtGui import QCursor
             self.menu.popup(QCursor.pos())
