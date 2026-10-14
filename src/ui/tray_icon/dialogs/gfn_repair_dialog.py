@@ -1,9 +1,8 @@
 import os
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QProgressBar, QHBoxLayout, QPushButton
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
 
-from ..constants import ASSETS_DIR
+from src.ui.assets import app_icon
 from src.ui.dialogs import GAMING_STYLESHEET
 from src.core.utils import get_lang_from_registry, load_locale
 
@@ -18,7 +17,7 @@ class GFNRepairDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle(TEXTS.get("repair_title", "Repairing GeForce NOW"))
-        self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        self.setWindowIcon(app_icon())
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.setFixedSize(450, 180)
         self.setStyleSheet(GAMING_STYLESHEET)

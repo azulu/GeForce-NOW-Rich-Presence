@@ -1,9 +1,8 @@
 import os
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QHBoxLayout
 from PyQt5.QtCore import Qt, pyqtSignal, QTimer
-from PyQt5.QtGui import QIcon
 
-from ..constants import ASSETS_DIR
+from src.ui.assets import app_icon
 from src.ui.dialogs import GAMING_STYLESHEET, GamingMessageBox
 from src.core.utils import get_lang_from_registry, load_locale
 
@@ -24,7 +23,7 @@ class AskGameDialog(QDialog):
         self.texts = TEXTS
 
         self.setWindowTitle(title)
-        self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        self.setWindowIcon(app_icon())
         self.setFixedSize(460, 280)
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.setStyleSheet(GAMING_STYLESHEET)
@@ -130,7 +129,7 @@ class MatchSelectionDialog(QDialog):
 
         title_text = TEXTS.get("match_title", "Coincidencias para: {busqueda}").replace("{busqueda}", game_key)
         self.setWindowTitle(title_text)
-        self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        self.setWindowIcon(app_icon())
         self.setMinimumWidth(540)
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
 

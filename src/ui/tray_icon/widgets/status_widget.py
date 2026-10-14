@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QLabel, QWidgetAction, QFrame, QHBoxLayout, QVBoxLay
 from PyQt5.QtCore import Qt, QTimer, QSize
 from PyQt5.QtGui import QPixmap, QPainter, QColor, QBrush, QFont
 
-from ..constants import ASSETS_DIR
+from ..constants import asset_path
 from ..styles import STATUS_FRAME_STYLESHEET, STATUS_TITLE_STYLESHEET, STATUS_LABEL_STYLESHEET
 
 class PulsingDotWidget(QLabel):
@@ -26,11 +26,11 @@ class PulsingDotWidget(QLabel):
             
     def load_icon(self):
         self.original_pixmap = None
-        path = ASSETS_DIR / "iconos" / "gfn.svg"
+        path = asset_path("iconos", "gfn.svg")
         if not path.exists():
-            path = ASSETS_DIR / "iconos" / "status.svg"
+            path = asset_path("iconos", "status.svg")
         if not path.exists():
-            path = ASSETS_DIR / "geforce.ico"
+            path = asset_path("geforce.ico")
             
         if path.exists():
             self.original_pixmap = QPixmap(str(path)).scaled(20, 20, Qt.KeepAspectRatio, Qt.SmoothTransformation)
@@ -171,8 +171,8 @@ class StatusWidgetAction(QWidgetAction):
         self.label.setText(text)
         
         # Setup the dynamic SVGs for status indicators
-        check_path = ASSETS_DIR / "iconos" / "status-check.svg"
-        failed_path = ASSETS_DIR / "iconos" / "status-failed.svg"
+        check_path = asset_path("iconos", "status-check.svg")
+        failed_path = asset_path("iconos", "status-failed.svg")
         
         green_color = QColor(0, 230, 118)
         red_color = QColor(183, 28, 28)

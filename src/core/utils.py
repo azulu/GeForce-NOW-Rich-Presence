@@ -46,6 +46,12 @@ DISCORD_AUTO_APPLY_THRESHOLD = 0.85
 DISCORD_ASK_TIMEOUT = 10
 LOCK_FILE = Path(tempfile.gettempdir()) / "geforce_presence.lock"
 
+
+def asset_path(*parts) -> Path:
+    """Return the path of a file under the assets directory."""
+    return ASSETS_DIR.joinpath(*parts)
+
+
 # User-specific persistent data directory
 if IS_WINDOWS:
     _appdata = Path(os.getenv("APPDATA", Path.home() / "AppData" / "Roaming"))

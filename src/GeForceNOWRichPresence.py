@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QFontDatabase
 
 from src.core.utils import (
-    BASE_DIR, CONFIG_DIR, LOGS_DIR, LANG_DIR, ASSETS_DIR, LOG_FILE, ENV_PATH,
+    BASE_DIR, CONFIG_DIR, LOGS_DIR, LANG_DIR, ASSETS_DIR, LOG_FILE, ENV_PATH, asset_path,
     get_lang_from_registry, load_locale, ensure_env_file, acquire_lock, release_lock,
     set_autostart_windows, IS_WINDOWS
 )
@@ -164,7 +164,7 @@ def main():
 
         app = QApplication(sys.argv)
         for ext in ["ttf", "otf"]:
-            p = ASSETS_DIR / f"font.{ext}"
+            p = asset_path(f"font.{ext}")
             if p.exists():
                 QFontDatabase.addApplicationFont(str(p))
                 break
@@ -214,7 +214,7 @@ def main():
     # Load custom font (ttf or otf)
     font_path = None
     for ext in ["ttf", "otf"]:
-        p = ASSETS_DIR / f"font.{ext}"
+        p = asset_path(f"font.{ext}")
         if p.exists():
             font_path = str(p)
             break

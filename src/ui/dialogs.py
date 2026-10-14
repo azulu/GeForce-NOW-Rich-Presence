@@ -1,8 +1,9 @@
 from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, 
                              QListWidget, QHBoxLayout, QWidget, QPlainTextEdit, QFileDialog)
-from PyQt5.QtGui import QIcon, QSyntaxHighlighter, QTextCharFormat, QColor, QFont, QTextCursor
+from PyQt5.QtGui import QSyntaxHighlighter, QTextCharFormat, QColor, QFont, QTextCursor
 from PyQt5.QtCore import Qt, QSize, QRegExp
-from src.core.utils import ASSETS_DIR, LOG_FILE
+from src.core.utils import LOG_FILE
+from src.ui.assets import app_icon
 from src.core.utils import get_lang_from_registry, load_locale
 from src.version import VERSION
 import os
@@ -153,7 +154,7 @@ class GamingMessageBox(QDialog):
     def __init__(self, title, text, icon_type="info", checkbox_text=None, parent=None):
         super().__init__(parent)
         self.setWindowTitle(title)
-        self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        self.setWindowIcon(app_icon())
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.setStyleSheet(GAMING_STYLESHEET)
         
@@ -244,7 +245,7 @@ class GamingInputDialog(QDialog):
     def __init__(self, title, label_text, value=0, min_val=0, max_val=100, step=1, parent=None):
         super().__init__(parent)
         self.setWindowTitle(title)
-        self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        self.setWindowIcon(app_icon())
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.setStyleSheet(GAMING_STYLESHEET)
         
@@ -290,7 +291,7 @@ class GamingTextInputDialog(QDialog):
     def __init__(self, title, label_text, default_value="", parent=None):
         super().__init__(parent)
         self.setWindowTitle(title)
-        self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        self.setWindowIcon(app_icon())
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.setStyleSheet(GAMING_STYLESHEET)
         
@@ -372,7 +373,7 @@ class GamingLogViewerDialog(QDialog):
         super().__init__(parent)
         self.texts = texts if texts is not None else TEXTS
         self.setWindowTitle(self.texts.get("log_viewer_title", "Visor de Registros (Logs)"))
-        self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        self.setWindowIcon(app_icon())
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.setStyleSheet(GAMING_STYLESHEET)
         self.setMinimumSize(750, 500)
@@ -480,7 +481,7 @@ class CrashReporterDialog(QDialog):
         super().__init__(parent)
         self.texts = texts if texts is not None else TEXTS
         self.setWindowTitle(self.texts.get("crash_title", "⚠️ Unexpected Error"))
-        self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        self.setWindowIcon(app_icon())
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.setStyleSheet(GAMING_STYLESHEET)
         self.setMinimumSize(600, 450)

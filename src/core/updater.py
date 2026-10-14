@@ -16,11 +16,9 @@ from PyQt5.QtWidgets import (
     QScrollArea
 )
 from PyQt5.QtCore import QThread, pyqtSignal, Qt, QObject
-from PyQt5.QtGui import QIcon
 
 from src.version import VERSION
 from src.utils.i18n import t
-from src.core.utils import ASSETS_DIR
 
 # Common Stylesheet to match the rest of the app (Copied from dialogs.py to avoid circular imports)
 GAMING_STYLESHEET = """
@@ -519,7 +517,8 @@ class UpdateDialog(QDialog):
         self.update_reason = update_reason
         self.ignore_clicked = False
         self.setWindowTitle(t.get("update_available_title", "Update Available"))
-        self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        from src.ui.assets import app_icon  # lazy: keep core free of UI imports at load time
+        self.setWindowIcon(app_icon())
         self.setFixedSize(400, 300)
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setStyleSheet(GAMING_STYLESHEET)

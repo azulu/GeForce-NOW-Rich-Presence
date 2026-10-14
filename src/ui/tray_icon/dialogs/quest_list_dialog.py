@@ -3,9 +3,8 @@ import time
 from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QLabel, QPushButton, QListWidget, 
                              QHBoxLayout, QWidget, QProgressBar, QListWidgetItem, QApplication)
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QIcon
 
-from ..constants import ASSETS_DIR
+from src.ui.assets import app_icon
 from src.ui.dialogs import GAMING_STYLESHEET
 from src.core.utils import get_lang_from_registry, load_locale
 from .force_game_dialog import AskGameDialog
@@ -22,7 +21,7 @@ class QuestListDialog(QDialog):
         super().__init__(parent)
         self.pm = presence_manager
         self.setWindowTitle("Discord Quest Mode - Active Games")
-        self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        self.setWindowIcon(app_icon())
         self.setMinimumWidth(450)
         self.setMinimumHeight(400)
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)

@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from typing import Optional, Dict
 
-from src.core.utils import IS_WINDOWS, ASSETS_DIR
+from src.core.utils import IS_WINDOWS, asset_path
 
 logger = logging.getLogger('geforce_presence')
 APP_USER_MODEL_ID = "KarmaDevz.GeForcePresence"
@@ -65,7 +65,7 @@ def setup_jumplist(texts: Optional[Dict[str, str]] = None) -> bool:
             main_script = str(Path(__file__).resolve().parent.parent / "GeForceNOWRichPresence.py")
             link.SetPath(exe_path)
             link.SetArguments(f'"{main_script}" --logs')
-            ico_path = ASSETS_DIR / "geforce.ico"
+            ico_path = asset_path("geforce.ico")
             if ico_path.exists():
                 link.SetIconLocation(str(ico_path), 0)
                 

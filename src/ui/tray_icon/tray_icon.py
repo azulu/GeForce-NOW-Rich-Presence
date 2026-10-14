@@ -10,7 +10,8 @@ from PyQt5.QtCore import Qt
 
 from src.core.utils import get_lang_from_registry, load_locale, LANG_DIR, IS_WINDOWS
 from src.version import VERSION
-from .constants import ASSETS_DIR
+from .constants import asset_path
+from src.ui.assets import app_icon
 from .widgets import StatusWidgetAction, CustomMenuItemAction, SectionHeaderAction, VersionLabelAction
 from .mixins import (CookieHandlerMixin, ForceGameHandlerMixin, IntegrityHandlerMixin,
                      NavigationHandlerMixin, UpdaterHandlerMixin, PresenceHandlerMixin)
@@ -43,7 +44,7 @@ class SystemTrayIcon(QSystemTrayIcon,
         TEXTS = texts
         self.texts = texts
         
-        self.setIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        self.setIcon(app_icon())
         self.setToolTip("GeForce NOW Presence")
         
         self.menu = QMenu(parent)
@@ -151,7 +152,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             }
             icon_file = icon_map.get(state)
             if icon_file:
-                path = ASSETS_DIR / "iconos" / icon_file
+                path = asset_path("iconos", icon_file)
                 if path.exists():
                     status_action.setIcon(QIcon(str(path)))
             
@@ -159,7 +160,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             disc_action = self.menu.addAction(disc_status)
             disc_action.setEnabled(False)
             disc_icon = "status-check.svg" if discord_connected else "status-failed.svg"
-            path = ASSETS_DIR / "iconos" / disc_icon
+            path = asset_path("iconos", disc_icon)
             if path.exists():
                 disc_action.setIcon(QIcon(str(path)))
                 
@@ -167,7 +168,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             gfn_action = self.menu.addAction(gfn_status)
             gfn_action.setEnabled(False)
             gfn_icon = "status-check.svg" if gfn_running else "status-failed.svg"
-            path = ASSETS_DIR / "iconos" / gfn_icon
+            path = asset_path("iconos", gfn_icon)
             if path.exists():
                 gfn_action.setIcon(QIcon(str(path)))
 
@@ -207,7 +208,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             self.menu.addAction(cookie_action)
         else:
             cookie_action = self.menu.addAction(cookie_text)
-            path = ASSETS_DIR / "iconos" / "steam-color.svg"
+            path = asset_path("iconos", "steam-color.svg")
             if path.exists():
                 cookie_action.setIcon(QIcon(str(path)))
             cookie_action.triggered.connect(self.obtain_cookie)
@@ -233,7 +234,7 @@ class SystemTrayIcon(QSystemTrayIcon,
                 self.menu.addAction(cp_action)
             else:
                 cp_action = self.menu.addAction(cp_text)
-                path = ASSETS_DIR / "iconos" / "target.svg"
+                path = asset_path("iconos", "target.svg")
                 if path.exists():
                     cp_action.setIcon(QIcon(str(path)))
                 cp_action.triggered.connect(self.open_custom_presence_dialog)
@@ -254,7 +255,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             self.menu.addAction(logs_action)
         else:
             logs_action = self.menu.addAction(logs_text)
-            path = ASSETS_DIR / "iconos" / "gear.svg"
+            path = asset_path("iconos", "gear.svg")
             if path.exists():
                 logs_action.setIcon(QIcon(str(path)))
             logs_action.triggered.connect(self.open_logs)
@@ -274,14 +275,14 @@ class SystemTrayIcon(QSystemTrayIcon,
             self.menu.addAction(invite_action)
         else:
             invite_action = self.menu.addAction(invite_text)
-            path = ASSETS_DIR / "iconos" / "discord.svg"
+            path = asset_path("iconos", "discord.svg")
             if path.exists():
                 invite_action.setIcon(QIcon(str(path)))
             invite_action.triggered.connect(lambda: webbrowser.open("https://discord.gg/kHUvndZnw7"))
 
         # 3.4 Startup Preferences Submenu
         startup_menu = QMenu(TEXTS.get("tray_startup_options", "Preferencias"), self.menu)
-        icon_pixmap = QPixmap(str(ASSETS_DIR / "iconos" / "startup.svg")).scaled(16, 16, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        icon_pixmap = QPixmap(str(asset_path("iconos", "startup.svg"))).scaled(16, 16, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         startup_menu.setIcon(QIcon(icon_pixmap))
         startup_menu.setStyleSheet(self.menu.styleSheet())
         
@@ -320,7 +321,7 @@ class SystemTrayIcon(QSystemTrayIcon,
         
         # 3.5 Language Submenu
         lang_menu = QMenu(TEXTS.get("tray_language", "Idioma"), self.menu)
-        lang_pixmap = QPixmap(str(ASSETS_DIR / "iconos" / "sync.svg")).scaled(16, 16, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        lang_pixmap = QPixmap(str(asset_path("iconos", "sync.svg"))).scaled(16, 16, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         
         # Tint language icon to #b0b3b8 to match the other unhovered icons
         tinted_pixmap = QPixmap(lang_pixmap.size())
@@ -357,7 +358,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             self.menu.addAction(update_action)
         else:
             update_action = self.menu.addAction(update_text)
-            path = ASSETS_DIR / "iconos" / "update.svg"
+            path = asset_path("iconos", "update.svg")
             if path.exists():
                 update_action.setIcon(QIcon(str(path)))
             update_action.triggered.connect(self.manual_check_updates)
@@ -370,7 +371,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             self.menu.addAction(about_action)
         else:
             about_action = self.menu.addAction(about_text)
-            path = ASSETS_DIR / "iconos" / "info.svg"
+            path = asset_path("iconos", "info.svg")
             if path.exists():
                 about_action.setIcon(QIcon(str(path)))
             about_action.triggered.connect(self.open_about)
@@ -385,7 +386,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             self.menu.addAction(exit_action)
         else:
             exit_action = self.menu.addAction(exit_text)
-            path = ASSETS_DIR / "iconos" / "can.svg"
+            path = asset_path("iconos", "can.svg")
             if path.exists():
                 exit_action.setIcon(QIcon(str(path)))
             exit_action.triggered.connect(QApplication.instance().quit)

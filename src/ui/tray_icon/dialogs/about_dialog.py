@@ -1,9 +1,10 @@
 import os
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QWidget
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QIcon, QPixmap, QPainter, QColor, QBrush, QFont, QFontDatabase, QLinearGradient, QPen
+from PyQt5.QtGui import QPixmap, QPainter, QColor, QBrush, QFont, QFontDatabase, QLinearGradient, QPen
 
-from ..constants import ASSETS_DIR
+from ..constants import asset_path
+from src.ui.assets import app_icon
 from src.core.utils import get_lang_from_registry, load_locale
 from src.version import VERSION
 
@@ -21,9 +22,9 @@ def load_about_fonts():
     global _fonts_loaded
     if _fonts_loaded:
         return
-    gfn_font_path = ASSETS_DIR / "GEFORCENOW.otf"
-    rp_over_font_path = ASSETS_DIR / "RICHPRESENCEOver.ttf"
-    rp_under_font_path = ASSETS_DIR / "RICHPRESENCEUnder.ttf"
+    gfn_font_path = asset_path("GEFORCENOW.otf")
+    rp_over_font_path = asset_path("RICHPRESENCEOver.ttf")
+    rp_under_font_path = asset_path("RICHPRESENCEUnder.ttf")
 
     if gfn_font_path.exists():
         QFontDatabase.addApplicationFont(str(gfn_font_path))
@@ -119,7 +120,7 @@ class HeartBadge(QLabel):
         painter.drawEllipse(0, 0, self.width(), self.height())
         
         # Draw heart.svg in the center
-        path = ASSETS_DIR / "iconos" / "heart.svg"
+        path = asset_path("iconos", "heart.svg")
         if path.exists():
             pixmap = QPixmap(str(path)).scaled(22, 22, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             
@@ -185,9 +186,9 @@ class SocialButton(QWidget):
             painter.setPen(Qt.NoPen)
             painter.drawEllipse(0, 0, 36, 36)
             
-            icon_path = ASSETS_DIR / "iconos" / self.icon_name
+            icon_path = asset_path("iconos", self.icon_name)
             if not icon_path.exists():
-                icon_path = ASSETS_DIR / self.icon_name
+                icon_path = asset_path(self.icon_name)
                 
             if icon_path.exists():
                 icon_pix = QPixmap(str(icon_path)).scaled(18, 18, Qt.KeepAspectRatio, Qt.SmoothTransformation)
@@ -204,9 +205,9 @@ class SocialButton(QWidget):
                 y = (36 - tinted.height()) // 2
                 painter.drawPixmap(x, y, tinted)
         else:
-            icon_path = ASSETS_DIR / "iconos" / self.icon_name
+            icon_path = asset_path("iconos", self.icon_name)
             if not icon_path.exists():
-                icon_path = ASSETS_DIR / self.icon_name
+                icon_path = asset_path(self.icon_name)
                 
             if icon_path.exists():
                 icon_pix = QPixmap(str(icon_path)).scaled(32, 32, Qt.KeepAspectRatio, Qt.SmoothTransformation)
@@ -274,7 +275,7 @@ class AboutDialog(QDialog):
             self.texts = texts
             
         self.setWindowTitle(self.texts.get("about", "About"))
-        self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        self.setWindowIcon(app_icon())
         self.setFixedSize(680, 505)
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.setStyleSheet("""
@@ -312,8 +313,8 @@ class AboutDialog(QDialog):
         logo_layout.setAlignment(Qt.AlignCenter)
         logo_layout.setSpacing(15)
         
-        gfn_logo_path = ASSETS_DIR / "GFNblackbg.jpg"
-        discord_logo_path = ASSETS_DIR / "discordblackbg.jpg"
+        gfn_logo_path = asset_path("GFNblackbg.jpg")
+        discord_logo_path = asset_path("discordblackbg.jpg")
         
         if gfn_logo_path.exists():
             gfn_logo_lbl = QLabel()

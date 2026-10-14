@@ -1,4 +1,4 @@
-from src.core.utils import ASSETS_DIR
+from src.core.utils import asset_path
 from src.version import VERSION
 
 DEFAULT_CLIENT_ID = "1095416975028650046"

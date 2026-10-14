@@ -1,14 +1,13 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QSpinBox
-from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
-from src.core.utils import ASSETS_DIR
+from src.ui.assets import app_icon
 from src.ui.dialogs import GAMING_STYLESHEET
 
 class CustomPresenceDialog(QDialog):
     def __init__(self, game_name, current_data, parent=None):
         super().__init__(parent)
         self.setWindowTitle(f"Custom Presence: {game_name}")
-        self.setWindowIcon(QIcon(str(ASSETS_DIR / "geforce.ico")))
+        self.setWindowIcon(app_icon())
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.setStyleSheet(GAMING_STYLESHEET)
         

@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidgetAction, QFrame, QHBoxLayout, QLabel, QMenu
 from PyQt5.QtCore import Qt, QSize, pyqtSignal
 from PyQt5.QtGui import QPixmap, QPainter, QColor
 
-from ..constants import ASSETS_DIR
+from ..constants import asset_path
 from ..styles import MENU_ITEM_FRAME_STYLESHEET, MENU_ITEM_TEXT_DANGER, MENU_ITEM_TEXT_NORMAL
 
 class CustomMenuItemWidget(QFrame):
@@ -106,7 +106,7 @@ class CustomMenuItemWidget(QFrame):
             "steam-color.svg": "🎮"
         }
         
-        path = ASSETS_DIR / "iconos" / icon_name
+        path = asset_path("iconos", icon_name)
         if path.exists():
             self.original_left_pixmap = QPixmap(str(path)).scaled(16, 16, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.update_icon_colors(is_hover=False)
@@ -121,7 +121,7 @@ class CustomMenuItemWidget(QFrame):
             "external-link.svg": "↗"
         }
         
-        path = ASSETS_DIR / "iconos" / icon_name
+        path = asset_path("iconos", icon_name)
         if path.exists():
             self.original_right_pixmap = QPixmap(str(path)).scaled(14, 14, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.update_icon_colors(is_hover=False)
