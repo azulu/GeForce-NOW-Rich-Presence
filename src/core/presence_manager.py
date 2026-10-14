@@ -519,6 +519,9 @@ class PresenceManager(QObject):
         Copia dumb.exe con un nombre único para que aparezca distinto (opcional) 
         o simplemente corre múltiples procesos.
         """
+        if IS_LINUX:
+            logger.warning("⚠️ El modo Quest no está disponible en Linux.")
+            return None
         try:
             import re
             safe_name = re.sub(r'[^a-zA-Z0-9_\-\.]', '_', game_name)
@@ -699,6 +702,9 @@ class PresenceManager(QObject):
                         self.stop_quest_game(gid, keep_in_list=True)
 
     def launch_fake_executable(self, executable_path: str, game_name: str = None):
+        if IS_LINUX:
+            logger.debug("🐧 Ejecutable falso omitido en Linux (dumb.exe es solo para Windows).")
+            return
         try:
             temp_dir = Path(tempfile.gettempdir()) / "discord_fake_game"
             
@@ -737,7 +743,7 @@ class PresenceManager(QObject):
                 self.fake_exec_path = exec_full_path
                 
             else:
-                # Windows and Linux logic
+                # Windows logic (Linux returns early above)
                 exec_full_path = temp_dir / executable_path
                 exec_full_path.parent.mkdir(parents=True, exist_ok=True)
 
