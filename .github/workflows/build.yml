@@ -47,6 +47,18 @@ jobs:
               print(f"Synced version.py with tag: {ver}")
           else:
               print(f"Skipping version sync for ref: {ref} (Type: {ref_type})")
+          # version.txt (Windows exe version info): numeric part of the tag, padded to 4
+          m = re.match(r'^v?(\d+(?:\.\d+){0,3})', ref)
+          if ref_type == 'tag' and m:
+              parts = (m.group(1).split('.') + ['0'] * 4)[:4]
+              tup, dotted = ','.join(parts), '.'.join(parts)
+              with open('version.txt', encoding='utf-8', newline='') as f:
+                  txt = f.read()
+              txt = re.sub(r'(filevers|prodvers)=\([\d, ]+\)', rf'\1=({tup})', txt)
+              txt = re.sub(r"(u'(?:File|Product)Version', u')[^']*'", rf"\g<1>{dotted}'", txt)
+              with open('version.txt', 'w', encoding='utf-8', newline='') as f:
+                  f.write(txt)
+              print(f"Synced version.txt with tag: {dotted}")
         shell: python
 
       - name: Install dependencies
