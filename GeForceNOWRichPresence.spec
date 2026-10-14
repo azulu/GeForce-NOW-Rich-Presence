@@ -1,4 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
+import os
 import sys
 
 
@@ -6,7 +7,9 @@ a = Analysis(
     ['src/GeForceNOWRichPresence.py'],
     pathex=[],
     binaries=[],
-    datas=[('src', 'src'), ('tools', 'tools'), ('lang', 'lang'), ('config', 'config'), ('assets', 'assets')],
+    # tools/ only exists when the dumb helper was built first (Windows CI).
+    datas=[('src', 'src'), ('lang', 'lang'), ('config', 'config'), ('assets', 'assets')]
+    + ([('tools', 'tools')] if os.path.isdir(os.path.join(SPECPATH, 'tools')) else []),
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

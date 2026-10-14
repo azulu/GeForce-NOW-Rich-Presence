@@ -55,6 +55,14 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
+      - name: Build dumb helper (Windows only)
+        if: matrix.os == 'windows-latest'
+        run: |
+          pyinstaller --noconfirm dumb.spec
+          New-Item -ItemType Directory -Force -Path tools | Out-Null
+          Copy-Item dist/dumb.exe tools/dumb.exe
+        shell: pwsh
+
       - name: Build executable
         run: |
           pyinstaller --clean --noconfirm GeForceNOWRichPresence.spec
