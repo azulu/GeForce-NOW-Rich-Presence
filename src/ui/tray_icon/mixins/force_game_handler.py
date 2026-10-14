@@ -34,7 +34,7 @@ class ForceGameHandlerMixin(Base):
 
         if self.pm.forced_game:
             self.pm.stop_force_game()
-            self.showMessage("OK", "Forzado de juego detenido.", QSystemTrayIcon.Information, 3000)
+            self.showMessage("OK", TEXTS.get("force_game_stopped", "Game forcing stopped."), QSystemTrayIcon.Information, 3000)
             self.update_menu()
             return
 
@@ -66,10 +66,10 @@ class ForceGameHandlerMixin(Base):
 
             if apps:
                 dialog.set_update_result(True, len(apps))
-                self.showMessage("Info", f"Lista de juegos actualizada exitosamente ({len(apps)} apps).", QSystemTrayIcon.Information, 3000)
+                self.showMessage("Info", TEXTS.get("force_list_updated", "Game list updated successfully ({count} apps).").replace("{count}", str(len(apps))), QSystemTrayIcon.Information, 3000)
             else:
                 dialog.set_update_result(False)
-                self.showMessage("Error", "No se pudo actualizar la lista de juegos de Discord.", QSystemTrayIcon.Warning, 4000)
+                self.showMessage("Error", TEXTS.get("force_list_update_error", "Could not update the Discord game list."), QSystemTrayIcon.Warning, 4000)
 
         dialog.quest_mode_requested.connect(on_quest_opened)
         dialog.update_list_requested.connect(on_update_list_opened)
@@ -108,7 +108,7 @@ class ForceGameHandlerMixin(Base):
         if not options:
             status = self.pm.check_discord_cache_status()
             if status["status"] == "MISSING" or status["hours"] > 168:
-                self.showMessage("Buscando...", f"No encontrado en caché (antigua/faltante). Descargando datos recientes para '{game_name}'...", QSystemTrayIcon.Information, 4000)
+                self.showMessage(TEXTS.get("force_searching", "Searching..."), TEXTS.get("force_cache_miss", "Not found in cache (old/missing). Downloading recent data for '{game}'...").replace("{game}", game_name), QSystemTrayIcon.Information, 4000)
                 QApplication.processEvents() 
                 apps = self.pm._fetch_discord_apps_cached(force_download=True)
                 
@@ -122,11 +122,11 @@ class ForceGameHandlerMixin(Base):
                 options = options[:50]
         
         if not options:
-            self.showMessage("Info", "Sin coincidencias encontradas.", QSystemTrayIcon.Information, 3000)
+            self.showMessage("Info", TEXTS.get("force_no_matches", "No matches found."), QSystemTrayIcon.Information, 3000)
             return False
 
         # Show selection dialog
-        sel_dialog = MatchSelectionDialog("Seleccionar Juego (Quest)", options)
+        sel_dialog = MatchSelectionDialog(TEXTS.get("quest_select_game", "Select Game (Quest)"), options)
         if sel_dialog.exec_() == QDialog.Accepted and sel_dialog.selected_match:
             match = sel_dialog.selected_match
             self.apply_quest_game(match)
@@ -173,7 +173,7 @@ class ForceGameHandlerMixin(Base):
         if not options:
             status = self.pm.check_discord_cache_status()
             if status["status"] == "MISSING" or status["hours"] > 168:
-                self.showMessage("Buscando...", f"No encontrado en caché (antigua/faltante). Descargando datos recientes de Discord para '{game_name}'...", QSystemTrayIcon.Information, 4000)
+                self.showMessage(TEXTS.get("force_searching", "Searching..."), TEXTS.get("force_cache_miss_discord", "Not found in cache (old/missing). Downloading recent Discord data for '{game}'...").replace("{game}", game_name), QSystemTrayIcon.Information, 4000)
                 QApplication.processEvents() # Keep UI responsive (mostly)
                 
                 # Update cache
@@ -190,11 +190,11 @@ class ForceGameHandlerMixin(Base):
                 options = options[:50]
 
         if not options:
-            self.showMessage("Info", "Sin coincidencias en JSON ni Discord (incluso tras actualizar).", QSystemTrayIcon.Information, 3000)
+            self.showMessage("Info", TEXTS.get("force_no_matches_anywhere", "No matches in JSON or Discord (even after updating)."), QSystemTrayIcon.Information, 3000)
             return
 
         # Show selection dialog
-        sel_dialog = MatchSelectionDialog("Seleccionar juego", options)
+        sel_dialog = MatchSelectionDialog(TEXTS.get("force_select_game", "Select game"), options)
         if sel_dialog.exec_() == QDialog.Accepted and sel_dialog.selected_match:
             match = sel_dialog.selected_match
             self.apply_force_game(match)

@@ -5,7 +5,7 @@ try:
     app_id = "NVIDIA.GeForceNOW"
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 except Exception as e:
-    print(f"⚠️ No se pudo establecer AppID: {e}")
+    print(f"⚠️ Could not set AppID: {e}")
 
 root = tk.Tk()
 root.title("PRAGMATA")

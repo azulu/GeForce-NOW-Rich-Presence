@@ -22,14 +22,14 @@ class PresenceHandlerMixin(Base):
     def open_custom_presence_dialog(self):
         game = self.pm.forced_game or self.pm.last_game
         if not game:
-            self.showMessage("Error", "No hay juego activo.", QSystemTrayIcon.Warning)
+            self.showMessage("Error", TEXTS.get("custom_presence_no_game", "No active game."), QSystemTrayIcon.Warning)
             return
             
         name = game.get("name", "Unknown")
         dlg = CustomPresenceDialog(name, game, parent=None)
         if dlg.exec_() == QDialog.Accepted and dlg.result_data:
             self.pm.set_custom_presence(dlg.result_data)
-            self.showMessage("Custom Presence", f"Presencia actualizada para {name}", QSystemTrayIcon.Information, 2000)
+            self.showMessage("Custom Presence", TEXTS.get("custom_presence_updated", "Presence updated for {game}").replace("{game}", name), QSystemTrayIcon.Information, 2000)
 
     def on_presence_updated(self, state, text, discord_connected=False, gfn_running=False):
         if getattr(self, "status_action", None):

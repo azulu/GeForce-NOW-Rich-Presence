@@ -140,7 +140,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             self.menu.addAction(self.status_action)
         else:
             # Standard menu items for Linux/macOS
-            status_text = f"Estado: {text}"
+            status_text = TEXTS.get("tray_status_label", "Status: {status}").replace("{status}", text)
             status_action = self.menu.addAction(status_text)
             status_action.setEnabled(False)
             
@@ -163,7 +163,7 @@ class SystemTrayIcon(QSystemTrayIcon,
             if path.exists():
                 disc_action.setIcon(QIcon(str(path)))
                 
-            gfn_status = "GFN: " + ("En ejecución" if gfn_running else "No iniciado")
+            gfn_status = "GFN: " + (TEXTS.get("tray_gfn_running", "Running") if gfn_running else TEXTS.get("tray_gfn_not_running", "Not started"))
             gfn_action = self.menu.addAction(gfn_status)
             gfn_action.setEnabled(False)
             gfn_icon = "status-check.svg" if gfn_running else "status-failed.svg"

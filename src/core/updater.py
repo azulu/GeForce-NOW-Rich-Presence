@@ -497,7 +497,7 @@ class UpdateWorker(QThread):
                             installer_path.unlink()
                     except Exception:
                         pass
-                    raise ValueError("El checksum SHA-256 del archivo descargado no coincide con el publicado en el Release.")
+                    raise ValueError(t.get("update_checksum_mismatch", "The SHA-256 checksum of the downloaded file does not match the one published in the release."))
             else:
                 # If no expected sha was provided, calculate actual sha to store on install
                 if self.target_metadata:
@@ -643,7 +643,7 @@ class UpdateDialog(QDialog):
                             f"try {{ "
                             f"  Expand-Archive -Path '{archive_path}' -DestinationPath $temp_extract -Force; "
                             f"  if (-not (Test-Path (Join-Path $temp_extract 'GeForceNOWRichPresence.exe'))) {{ "
-                            f"    throw 'El archivo extraido no contiene GeForceNOWRichPresence.exe'; "
+                            f"    throw 'The extracted archive does not contain GeForceNOWRichPresence.exe'; "
                             f"  }} "
                             f"  Remove-Item -Path '{install_dir}\\_internal' -Recurse -Force -ErrorAction SilentlyContinue; "
                             f"  Remove-Item -Path '{install_dir}\\lang' -Recurse -Force -ErrorAction SilentlyContinue; "
@@ -656,7 +656,7 @@ class UpdateDialog(QDialog):
                             f"  $success = $false; "
                             f"  if (Test-Path '{pending_build_path}') {{ Remove-Item -Path '{pending_build_path}' -Force -ErrorAction SilentlyContinue }}; "
                             f"  [System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms') | Out-Null; "
-                            f"  [System.Windows.Forms.MessageBox]::Show('No se pudieron reemplazar los archivos de la aplicación debido a un error de escritura o falta de permisos.`n`nDetalle: ' + $_.Exception.Message, 'Error de Actualización', 0, 16); "
+                            f"  [System.Windows.Forms.MessageBox]::Show('Could not replace the application files due to a write error or missing permissions.`n`nDetails: ' + $_.Exception.Message, 'Update Error', 0, 16); "
                             f"  $json = @{{ "
                             f"    timestamp = [double](Get-Date -UFormat %s); "
                             f"    version = '{version_str}'; "
@@ -692,7 +692,7 @@ class UpdateDialog(QDialog):
                             f"  open '{exe_path}'; "
                             f"else "
                             f"  [ -f '{pending_build_path}' ] && rm -f '{pending_build_path}'; "
-                            f"  osascript -e 'display alert \"Error de Actualización\" message \"No se pudieron reemplazar los archivos de la aplicación por falta de permisos o error de descompresión.\"'; "
+                            f"  osascript -e 'display alert \"Update Error\" message \"Could not replace the application files due to missing permissions or an extraction error.\"'; "
                             f"  echo \"{{\\\"timestamp\\\": $(date +%s), \\\"version\\\": \\\"{version_str}\\\", \\\"error\\\": \\\"Extraction failed on macOS\\\"}}\" > '{flag_path}'; "
                             f"  rm -rf \"$temp_extract\"; "
                             f"fi"
@@ -717,8 +717,8 @@ class UpdateDialog(QDialog):
                             f"  '{exe_path}' & "
                             f"else "
                             f"  [ -f '{pending_build_path}' ] && rm -f '{pending_build_path}'; "
-                            f"  zenity --error --text=\"No se pudieron reemplazar los archivos de la aplicación por falta de permisos o error de descompresión.\" 2>/dev/null || "
-                            f"  kdialog --error \"No se pudieron reemplazar los archivos de la aplicación por falta de permisos o error de descompresión.\" 2>/dev/null; "
+                            f"  zenity --error --text=\"Could not replace the application files due to missing permissions or an extraction error.\" 2>/dev/null || "
+                            f"  kdialog --error \"Could not replace the application files due to missing permissions or an extraction error.\" 2>/dev/null; "
                             f"  echo \"{{\\\"timestamp\\\": $(date +%s), \\\"version\\\": \\\"{version_str}\\\", \\\"error\\\": \\\"Extraction failed on Linux\\\"}}\" > '{flag_path}'; "
                             f"  rm -rf \"$temp_extract\"; "
                             f"fi"
@@ -728,10 +728,10 @@ class UpdateDialog(QDialog):
                         sys.exit(0)
                 else:
                     save_installed_build(build_to_save)
-                    msg = f"Modo de desarrollo: Actualización descargada en {installer_path}.\nLa auto-actualización silenciosa solo funciona en la versión compilada."
+                    msg = t.get("update_dev_mode_msg", "Development mode: update downloaded to {path}.\nSilent auto-update only works in the compiled version.").replace("{path}", str(installer_path))
                     logger.info(msg)
                     from src.ui.dialogs import GamingMessageBox
-                    GamingMessageBox.show_info(self, "Desarrollo", msg)
+                    GamingMessageBox.show_info(self, t.get("update_dev_mode_title", "Development"), msg)
                     self.accept()
             else:
                 # Launch installer wizard (.exe) on Windows if not a zip
@@ -774,7 +774,7 @@ class Updater(QObject):
                 data = safe_json_load(flag_file)
                 err_detail = ""
                 if data and isinstance(data, dict):
-                    err_detail = f" (Versión: {data.get('version', 'unknown')}, Error: {data.get('error', 'unknown')})"
+                    err_detail = f" (Version: {data.get('version', 'unknown')}, Error: {data.get('error', 'unknown')})"
                 logger.warning(f"La última actualización falló{err_detail}. Se omitirá la comprobación de actualizaciones automática en esta sesión.")
                 try:
                     flag_file.unlink()
@@ -837,7 +837,7 @@ class Updater(QObject):
         try:
             if not silent:
                 from src.ui.dialogs import GamingMessageBox
-                GamingMessageBox.show_warning(self.parent_widget, "Error", f"Error al comprobar actualizaciones: {msg}")
+                GamingMessageBox.show_warning(self.parent_widget, "Error", t.get("update_check_error", "Error checking for updates: {error}").replace("{error}", str(msg)))
         finally:
             self.checking_updates = False
 

@@ -150,7 +150,7 @@ def main():
     
     parser = argparse.ArgumentParser()
     parser.add_argument("--delay", type=int, default=0, help="Delay startup by N seconds")
-    parser.add_argument("--logs", action="store_true", help="Abrir directamente el visor de logs sin iniciar la presencia")
+    parser.add_argument("--logs", action="store_true", help="Open the log viewer directly without starting the presence")
     args, unknown = parser.parse_known_args()
     
     # 0. Standalone Log Viewer Mode

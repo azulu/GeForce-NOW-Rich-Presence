@@ -66,7 +66,7 @@ class QuestListDialog(QDialog):
         self.refresh_list()
         
     def on_add_game(self):
-        dlg = AskGameDialog(parent=self, message="Nombre del juego para Quest:")
+        dlg = AskGameDialog(parent=self, message=TEXTS.get("quest_game_name_prompt", "Game name for Quest:"))
         dlg.quest_mode_btn.hide() # Force quest mode if adding from here
         
         def on_update_list():
@@ -107,7 +107,7 @@ class QuestListDialog(QDialog):
         
         quests = getattr(self.pm, "active_quests", {})
         if not quests:
-            self.list_widget.addItem("No hay juegos activos en modo Quest.")
+            self.list_widget.addItem(TEXTS.get("quest_no_active_games", "No active games in Quest mode."))
             return
         
         sorted_quests = sorted(quests.items(), key=lambda x: x[1]['start_time'])
@@ -164,12 +164,12 @@ class QuestListDialog(QDialog):
             """)
             
             if data.get('finished', False):
-                status_text = "Estado: Detenido"
+                status_text = TEXTS.get("quest_status_stopped", "Status: Stopped")
                 progress.setValue(0)
             else:
                 mins = int(remaining // 60)
                 secs = int(remaining % 60)
-                status_text = f"⏱️ Tiempo restante: {mins:02d}:{secs:02d}"
+                status_text = TEXTS.get("quest_time_remaining", "⏱️ Time remaining: {time}").replace("{time}", f"{mins:02d}:{secs:02d}")
                 
             status_lbl = QLabel(status_text)
             status_lbl.setStyleSheet("color: #dcddde; font-size: 13px; font-weight: 500; padding-top: 2px;")

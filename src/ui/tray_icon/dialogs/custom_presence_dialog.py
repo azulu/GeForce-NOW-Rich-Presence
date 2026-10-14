@@ -1,8 +1,16 @@
+import os
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QSpinBox
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
-from src.core.utils import ASSETS_DIR
+from src.core.utils import ASSETS_DIR, get_lang_from_registry, load_locale
 from src.ui.dialogs import GAMING_STYLESHEET
+
+try:
+    LANG = get_lang_from_registry()
+    TEXTS = load_locale(LANG)
+except Exception:
+    LANG = os.getenv('GEFORCE_LANG', 'en')
+    TEXTS = load_locale(LANG)
 
 class CustomPresenceDialog(QDialog):
     def __init__(self, game_name, current_data, parent=None):
@@ -29,12 +37,12 @@ class CustomPresenceDialog(QDialog):
             layout.addLayout(r)
             return widget
 
-        self.details_edit = add_row("Detalles (Línea 1):", QLineEdit())
-        self.details_edit.setPlaceholderText("Ej: Jugando Competitivo")
+        self.details_edit = add_row(TEXTS.get("custom_presence_details_label", "Details (Line 1):"), QLineEdit())
+        self.details_edit.setPlaceholderText(TEXTS.get("custom_presence_details_placeholder", "E.g.: Playing Competitive"))
         self.details_edit.setText(current_data.get("custom_details", ""))
 
-        self.state_edit = add_row("Estado (Línea 2):", QLineEdit())
-        self.state_edit.setPlaceholderText("Ej: En grupo de 5")
+        self.state_edit = add_row(TEXTS.get("custom_presence_state_label", "State (Line 2):"), QLineEdit())
+        self.state_edit.setPlaceholderText(TEXTS.get("custom_presence_state_placeholder", "E.g.: In a group of 5"))
         self.state_edit.setText(current_data.get("custom_state", ""))
 
         # Party Size Row
@@ -49,25 +57,25 @@ class CustomPresenceDialog(QDialog):
         self.party_max.setValue(current_data.get("custom_party_size_max", 0))
         
         p_sub = QVBoxLayout()
-        p_sub.addWidget(QLabel("Personas (Actual):"))
+        p_sub.addWidget(QLabel(TEXTS.get("custom_presence_party_current", "Party (Current):")))
         p_sub.addWidget(self.party_current)
         party_layout.addLayout(p_sub)
         
         p_sub2 = QVBoxLayout()
-        p_sub2.addWidget(QLabel("Personas (Max):"))
+        p_sub2.addWidget(QLabel(TEXTS.get("custom_presence_party_max", "Party (Max):")))
         p_sub2.addWidget(self.party_max)
         party_layout.addLayout(p_sub2)
         
         layout.addLayout(party_layout)
         
-        layout.addWidget(QLabel("Nota: Si 'Max' es 0, no se mostrará información de grupo."))
+        layout.addWidget(QLabel(TEXTS.get("custom_presence_party_note", "Note: If 'Max' is 0, no party information will be shown.")))
 
         # Buttons
         btn_layout = QHBoxLayout()
-        self.save_btn = QPushButton("Guardar")
+        self.save_btn = QPushButton(TEXTS.get("save", "Save"))
         self.save_btn.clicked.connect(self.on_save)
         
-        self.cancel_btn = QPushButton("Cancelar")
+        self.cancel_btn = QPushButton(TEXTS.get("cancel", "Cancel"))
         self.cancel_btn.setObjectName("secondary")
         self.cancel_btn.clicked.connect(self.reject)
         

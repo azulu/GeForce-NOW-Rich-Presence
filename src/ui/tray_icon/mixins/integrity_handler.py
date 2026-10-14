@@ -51,7 +51,7 @@ class IntegrityHandlerMixin(Base):
                 logger.info("✅ games_config_merged.json restaurado y recargado con éxito.")
                 self.showMessage(
                     self.texts.get("integrity_title", "Verify Integrity"), 
-                    "Archivo de configuración restaurado de GitHub correctamente.", 
+                    self.texts.get("integrity_config_restored", "Configuration file restored from GitHub successfully."), 
                     QSystemTrayIcon.Information, 
                     3000
                 )
@@ -59,8 +59,8 @@ class IntegrityHandlerMixin(Base):
                 logger.error("❌ No se pudo descargar el archivo de configuración desde GitHub.")
                 GamingMessageBox.show_warning(
                     None,
-                    "Error de Integridad",
-                    "El archivo de configuración local está corrupto y no se pudo descargar el respaldo desde GitHub. Por favor comprueba tu conexión a internet."
+                    self.texts.get("integrity_error_title", "Integrity Error"),
+                    self.texts.get("integrity_config_error_msg", "The local configuration file is corrupted and the backup could not be downloaded from GitHub. Please check your internet connection.")
                 )
                 return
         
@@ -198,7 +198,7 @@ class IntegrityHandlerMixin(Base):
 
             if not getattr(self, '_download_progress_dlg', None):
                 cancel_text = getattr(self, 'texts', {}).get("cancel", "Cancel")
-                self._download_progress_dlg = QProgressDialog("Descargando lista de juegos...", cancel_text, 0, total if total > 0 else 0, None)
+                self._download_progress_dlg = QProgressDialog(getattr(self, 'texts', {}).get("integrity_downloading_games", "Downloading game list..."), cancel_text, 0, total if total > 0 else 0, None)
                 self._download_progress_dlg.setStyleSheet(GAMING_STYLESHEET)
                 self._download_progress_dlg.setWindowModality(Qt.WindowModal)
                 self._download_progress_dlg.setMinimumDuration(1500)
@@ -215,7 +215,8 @@ class IntegrityHandlerMixin(Base):
                         return f"{sz / 1024:.1f} KB"
                     return f"{sz / 1024 / 1024:.2f} MB"
                     
-                msg = f"Descargando lista de juegos... ({fmt(current)} / {fmt(total)})" if total > 0 else f"Descargando lista de juegos... ({fmt(current)})"
+                base_msg = getattr(self, 'texts', {}).get("integrity_downloading_games", "Downloading game list...")
+                msg = f"{base_msg} ({fmt(current)} / {fmt(total)})" if total > 0 else f"{base_msg} ({fmt(current)})"
                 dlg.setLabelText(msg)
                 dlg.setValue(current)
                 
@@ -253,11 +254,11 @@ class IntegrityHandlerMixin(Base):
         self._reinstaller_worker.start()
 
     def on_reinstall_started(self):
-        self.showMessage("GeForce NOW Error", "Recurso corrupto detectado. Reparando e instalando GFN...", QSystemTrayIcon.Information, 5000)
+        self.showMessage(self.texts.get("gfn_corrupted_title", "GeForce NOW Error"), self.texts.get("repair_started_msg", "Corrupted resource detected. Repairing and installing GFN..."), QSystemTrayIcon.Information, 5000)
 
     def on_reinstall_finished(self):
-        self.showMessage("GeForce NOW Reparado", "GeForce NOW se ha reinstalado correctamente.", QSystemTrayIcon.Information, 5000)
+        self.showMessage(self.texts.get("repair_done_title", "GeForce NOW Repaired"), self.texts.get("repair_done_msg", "GeForce NOW has been reinstalled successfully."), QSystemTrayIcon.Information, 5000)
         AppLauncher.launch_geforce_now()
 
     def on_reinstall_error(self, err):
-        self.showMessage("Error de Reparación", f"No se pudo reinstalar GFN: {err}", QSystemTrayIcon.Warning, 5000)
+        self.showMessage(self.texts.get("repair_error_title", "Repair Error"), self.texts.get("repair_error_msg", "Could not reinstall GFN: {error}").replace("{error}", str(err)), QSystemTrayIcon.Warning, 5000)
