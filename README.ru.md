@@ -129,6 +129,13 @@ pyinstaller --clean --noconfirm GeForceNOWRichPresence.spec
 ```
 Готовый результат будет находиться в папке `dist/GeForceNOWRichPresence/`.
 
+В Windows режим Quest использует небольшой вспомогательный файл `tools/dumb.exe`, которого нет в репозитории. Чтобы включить его в сборку, сначала соберите его и скопируйте в `tools/`:
+```bat
+pyinstaller --noconfirm dumb.spec
+mkdir tools
+copy dist\dumb.exe tools\
+```
+
 ---
 
 ## 💬 О проекте и поддержка

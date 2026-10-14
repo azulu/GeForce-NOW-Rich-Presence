@@ -135,6 +135,13 @@ pyinstaller --clean --noconfirm GeForceNOWRichPresence.spec
 ```
 The compiled output will be generated inside the `dist/GeForceNOWRichPresence/` folder.
 
+On Windows, Quest mode uses a small helper, `tools/dumb.exe`, which is not stored in the repository. To include it in the package, build it first and copy it into `tools/`:
+```bat
+pyinstaller --noconfirm dumb.spec
+mkdir tools
+copy dist\dumb.exe tools\
+```
+
 ---
 
 ## 💬 About & Support

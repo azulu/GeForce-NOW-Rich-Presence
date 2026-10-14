@@ -135,6 +135,13 @@ pyinstaller --clean --noconfirm GeForceNOWRichPresence.spec
 ```
 Los ejecutables resultantes se guardarán dentro de la carpeta `dist/GeForceNOWRichPresence/`.
 
+En Windows, el modo Quest usa un pequeño ejecutable auxiliar, `tools/dumb.exe`, que no está en el repositorio. Para incluirlo en el paquete, compílalo primero y cópialo en `tools/`:
+```bat
+pyinstaller --noconfirm dumb.spec
+mkdir tools
+copy dist\dumb.exe tools\
+```
+
 ---
 
 ## 💬 Acerca de y Soporte
